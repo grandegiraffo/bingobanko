@@ -2,7 +2,7 @@
   <div class="bingo-container">
     <header class="bingo-header">
       <h1>🎄 Hallmark Julefilm Bingo 🎄</h1>
-      <p class="subtitle">Klik på felterne, når scenerne sker!</p>
+      <p class="subtitle">Klik på felterne, når du ser scenerne</p>
     </header>
     
     <div class="bingo-grid">
@@ -25,6 +25,9 @@
       <button @click="resetGame" class="reset-button">
         🔄 Nulstil spil
       </button>
+      <div class="credits">
+        Efter idé af 🤎🐻
+      </div>
       <div class="score">
         {{ markedCount }} / {{ bingoSquares.length }} markeret
       </div>
@@ -45,17 +48,17 @@ const squareTemplates: Array<Omit<BingoSquare, 'marked'>> = [
   {
     title: 'Hjembyens hjemkomst',
     description:
-      'En travl storbykvinde vender modvilligt hjem til sin juleglade barndomsby – og møder naturligvis sin gamle flamme.'
+      'En travl storbykvinde vender modvilligt hjem til sin juleglade barndomsby - og møder naturligvis sin gamle flamme.'
   },
   {
     title: 'Juletræ i fare',
     description:
-      'Byens elskede juletræsfarm skal sælges eller lukkes – men måske kan kærlighed (og fundraising) redde den.'
+      'Byens elskede juletræsfarm skal sælges eller lukkes - men måske kan kærlighed (og fundraising) redde den.'
   },
   {
     title: 'Snevejr og skæbne',
     description:
-      'Et uventet snefald fanger to personer sammen – og sneen smelter først, når deres hjerter gør det samme.'
+      'Et uventet snefald fanger to personer sammen - og sneen smelter først, når deres hjerter gør det samme.'
   },
   {
     title: 'Børns juleønske',
@@ -64,20 +67,20 @@ const squareTemplates: Array<Omit<BingoSquare, 'marked'>> = [
   },
   {
     title: 'Gamle breve, ny kærlighed',
-    description: 'Et arvet hus afslører kærlighedsbreve fra fortiden – og inspirerer til ny romance i nutiden.'
+    description: 'Et arvet hus afslører kærlighedsbreve fra fortiden - og inspirerer til ny romance i nutiden.'
   },
   {
     title: 'Mistelten-magi',
-    description: 'De skubber hinanden drillende under misteltenen – og det bliver til filmens første kys.'
+    description: 'De skubber hinanden drillende under misteltenen - og det bliver til filmens første kys.'
   },
   {
     title: 'Falsk forlovelse',
-    description: 'De lader som om de er et par til jul – men hvem bliver først klar over, at der er ægte følelser?'
+    description: 'De lader som om de er et par til jul - men hvem bliver først klar over, at der er ægte følelser?'
   },
   {
     title: 'Julens festival-fejde',
     description:
-      'To rivaler tvinges til at planlægge byens julefestival sammen – og ender selvfølgelig med at forelske sig.'
+      'To rivaler tvinges til at planlægge byens julefestival sammen - og ender selvfølgelig med at forelske sig.'
   },
   {
     title: 'Julehaderen',
@@ -86,16 +89,16 @@ const squareTemplates: Array<Omit<BingoSquare, 'marked'>> = [
   },
   {
     title: 'Prins incognito',
-    description: 'Den almindelige turist viser sig at være en royal – og det hele ender i slot, sne og kærlighed.'
+    description: 'Den almindelige turist viser sig at være en royal - og det hele ender i slot, sne og kærlighed.'
   },
   {
     title: 'Grinchen i jakkesæt',
     description:
-      'En kold forretningsmand vil ødelægge julen – men bløder op takket ved byens charme og én bestemt person.'
+      'En kold forretningsmand vil ødelægge julen - men bløder op takket ved byens charme og én bestemt person.'
   },
   {
     title: "Ex'en vender tilbage",
-    description: 'En gammel ungdomskæreste dukker uventet op – og gnisten springer stadig.'
+    description: 'En gammel ungdomskæreste dukker uventet op - og gnisten springer stadig.'
   },
   {
     title: 'Bagekonkurrence-kaos',
@@ -157,9 +160,10 @@ const resetGame = () => {
 }
 
 .subtitle {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin: 0;
   opacity: 0.9;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .bingo-grid {
@@ -273,6 +277,13 @@ const resetGame = () => {
   color: white;
   font-size: 1.3rem;
   font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.credits {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
