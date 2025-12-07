@@ -270,45 +270,6 @@ function resetGame() {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Tablet and Desktop */
-@media (min-width: 768px) {
-  .bingo-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .bingo-header h1 {
-    font-size: 3rem;
-  }
-}
-
-/* Large Desktop */
-@media (min-width: 1200px) {
-  .bingo-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-  
-  .bingo-square {
-    min-height: 180px;
-  }
-}
-
-/* iPad specific */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .bingo-container {
-    padding: 30px;
-  }
-  
-  .bingo-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-  
-  .bingo-square {
-    min-height: 160px;
-    padding: 25px;
-  }
-}
-
 /* Mobile optimizations */
 @media (max-width: 767px) {
   .bingo-container {
@@ -354,6 +315,38 @@ function resetGame() {
   
   .score {
     font-size: 1.1rem;
+  }
+}
+
+/* Tablet (iPad) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .bingo-container {
+    padding: 30px;
+  }
+  
+  .bingo-header h1 {
+    font-size: 3rem;
+  }
+  
+  .bingo-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .bingo-square {
+    min-height: 160px;
+    padding: 25px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+  .bingo-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .bingo-square {
+    min-height: 180px;
   }
 }
 </style>
