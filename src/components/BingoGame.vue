@@ -32,99 +32,105 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 
-const bingoSquares = ref([
+interface BingoSquare {
+  title: string
+  description: string
+  marked: boolean
+}
+
+const squareTemplates: Array<Omit<BingoSquare, 'marked'>> = [
   {
-    title: "Hjembyens hjemkomst",
-    description: "En travl storbykvinde vender modvilligt hjem til sin juleglade barndomsby – og møder naturligvis sin gamle flamme.",
-    marked: false
+    title: 'Hjembyens hjemkomst',
+    description:
+      'En travl storbykvinde vender modvilligt hjem til sin juleglade barndomsby – og møder naturligvis sin gamle flamme.'
   },
   {
-    title: "Juletræ i fare",
-    description: "Byens elskede juletræsfarm skal sælges eller lukkes – men måske kan kærlighed (og fundraising) redde den.",
-    marked: false
+    title: 'Juletræ i fare',
+    description:
+      'Byens elskede juletræsfarm skal sælges eller lukkes – men måske kan kærlighed (og fundraising) redde den.'
   },
   {
-    title: "Snevejr og skæbne",
-    description: "Et uventet snefald fanger to personer sammen – og sneen smelter først, når deres hjerter gør det samme.",
-    marked: false
+    title: 'Snevejr og skæbne',
+    description:
+      'Et uventet snefald fanger to personer sammen – og sneen smelter først, når deres hjerter gør det samme.'
   },
   {
-    title: "Børns juleønske",
-    description: "Et barn ønsker sig ikke legetøj, men at mor eller far skal finde kærligheden igen. Og det sker, selvfølgelig.",
-    marked: false
+    title: 'Børns juleønske',
+    description:
+      'Et barn ønsker sig ikke legetøj, men at mor eller far skal finde kærligheden igen. Og det sker, selvfølgelig.'
   },
   {
-    title: "Gamle breve, ny kærlighed",
-    description: "Et arvet hus afslører kærlighedsbreve fra fortiden – og inspirerer til ny romance i nutiden.",
-    marked: false
+    title: 'Gamle breve, ny kærlighed',
+    description: 'Et arvet hus afslører kærlighedsbreve fra fortiden – og inspirerer til ny romance i nutiden.'
   },
   {
-    title: "Mistelten-magi",
-    description: "De skubber hinanden drillende under misteltenen – og det bliver til filmens første kys.",
-    marked: false
+    title: 'Mistelten-magi',
+    description: 'De skubber hinanden drillende under misteltenen – og det bliver til filmens første kys.'
   },
   {
-    title: "Falsk forlovelse",
-    description: "De lader som om de er et par til jul – men hvem bliver først klar over, at der er ægte følelser?",
-    marked: false
+    title: 'Falsk forlovelse',
+    description: 'De lader som om de er et par til jul – men hvem bliver først klar over, at der er ægte følelser?'
   },
   {
-    title: "Julens festival-fejde",
-    description: "To rivaler tvinges til at planlægge byens julefestival sammen – og ender selvfølgelig med at forelske sig.",
-    marked: false
+    title: 'Julens festival-fejde',
+    description:
+      'To rivaler tvinges til at planlægge byens julefestival sammen – og ender selvfølgelig med at forelske sig.'
   },
   {
-    title: "Julehaderen",
-    description: "En person, der hader alt ved jul, genfinder glæden (og kærligheden) via sne, peberkager og en ny partner.",
-    marked: false
+    title: 'Julehaderen',
+    description:
+      'En person, der hader alt ved jul, genfinder glæden (og kærligheden) via sne, peberkager og en ny partner.'
   },
   {
-    title: "Prins incognito",
-    description: "Den almindelige turist viser sig at være en royal – og det hele ender i slot, sne og kærlighed.",
-    marked: false
+    title: 'Prins incognito',
+    description: 'Den almindelige turist viser sig at være en royal – og det hele ender i slot, sne og kærlighed.'
   },
   {
-    title: "Grinchen i jakkesæt",
-    description: "En kold forretningsmand vil ødelægge julen – men bløder op takket ved byens charme og én bestemt person.",
-    marked: false
+    title: 'Grinchen i jakkesæt',
+    description:
+      'En kold forretningsmand vil ødelægge julen – men bløder op takket ved byens charme og én bestemt person.'
   },
   {
     title: "Ex'en vender tilbage",
-    description: "En gammel ungdomskæreste dukker uventet op – og gnisten springer stadig.",
-    marked: false
+    description: 'En gammel ungdomskæreste dukker uventet op – og gnisten springer stadig.'
   },
   {
-    title: "Bagekonkurrence-kaos",
-    description: "En bagedyst møder sabotage, misforståelser og flirten, men kærligheden vinder alligevel.",
-    marked: false
+    title: 'Bagekonkurrence-kaos',
+    description: 'En bagedyst møder sabotage, misforståelser og flirten, men kærligheden vinder alligevel.'
   },
   {
-    title: "Julens fortryllelse",
-    description: "Et magisk sneglobe, ønskeseddel eller mystisk bedstemor hjælper kærligheden på vej.",
-    marked: false
+    title: 'Julens fortryllelse',
+    description: 'Et magisk sneglobe, ønskeseddel eller mystisk bedstemor hjælper kærligheden på vej.'
   },
   {
-    title: "Juleaften-frieri",
-    description: "Hele byen samles, sneen daler, og nogen går ned på knæ og spørger: \"Vil du gifte dig med mig?\"",
-    marked: false
+    title: 'Juleaften-frieri',
+    description: 'Hele byen samles, sneen daler, og nogen går ned på knæ og spørger: "Vil du gifte dig med mig?"'
   }
-])
+]
 
-const markedCount = computed(() => {
-  return bingoSquares.value.filter(square => square.marked).length
-})
+const createSquares = (): BingoSquare[] =>
+  squareTemplates.map((square) => ({
+    ...square,
+    marked: false
+  }))
 
-function toggleSquare(index) {
-  bingoSquares.value[index].marked = !bingoSquares.value[index].marked
+const bingoSquares = ref<BingoSquare[]>(createSquares())
+
+const markedCount = computed(() =>
+  bingoSquares.value.filter((square) => square.marked).length
+)
+
+const toggleSquare = (index: number) => {
+  const square = bingoSquares.value[index]
+  if (!square) return
+  square.marked = !square.marked
 }
 
-function resetGame() {
-  bingoSquares.value.forEach(square => {
-    square.marked = false
-  })
+const resetGame = () => {
+  bingoSquares.value = createSquares()
 }
 </script>
 
