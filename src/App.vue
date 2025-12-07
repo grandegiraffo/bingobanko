@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import BingoGame from './components/BingoGame.vue'
 </script>
 
