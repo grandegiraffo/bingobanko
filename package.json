@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run type-check && vite build",
-    "preview": "vite preview",
-    "type-check": "vue-tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json"
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
+    "lint": "npm run type-check"
   },
   "dependencies": {
     "vue": "^3.5.24"
