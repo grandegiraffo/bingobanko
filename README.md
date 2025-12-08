@@ -80,7 +80,7 @@ npm run build
 
 The app uses Vue 3 Composition API with `<script setup>` syntax for cleaner, more concise code.
 
-Main component: `src/components/BingoGame.vue`
+Main component: `src/components/bingo-game.vue`
 
 ## License
 
