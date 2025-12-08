@@ -2,9 +2,13 @@
   <div class="bingo-container">
     <header class="bingo-header">
       <h1>🎄 Hallmark Julefilm Bingo 🎄</h1>
-      <div class="subtitle">Klik på felterne, når du ser scenerne</div>
+      <div class="subtitle">
+        Klik på felterne, når du ser scenerne
+      </div>
       <div class="scoreboard">
-        <div class="score-label">Point</div>
+        <div class="score-label">
+          Point
+        </div>
         <div class="score-value">
           <span class="score-current">{{ markedCount }}</span>
           <span class="score-divider">/</span>
@@ -28,26 +32,46 @@
           <div class="square-description">
             {{ square.description }}
           </div>
-          <div v-if="square.marked" class="checkmark">✓</div>
+          <div
+            v-if="square.marked"
+            class="checkmark"
+          >
+            ✓
+          </div>
         </div>
       </div>
     </div>
 
     <footer class="bingo-footer">
       <div class="button-group">
-        <button class="copy-link-button" @click="copyShareLink">
+        <button
+          class="copy-link-button"
+          @click="copyShareLink"
+        >
           {{ shareButtonLabel }}
         </button>
-        <button class="shuffle-button" @click="requestConfirm('shuffle')">
+        <button
+          class="shuffle-button"
+          @click="requestConfirm('shuffle')"
+        >
           🔀 Bland felter
         </button>
-        <button class="reset-button" @click="requestConfirm('reset')">
+        <button
+          class="reset-button"
+          @click="requestConfirm('reset')"
+        >
           🔄 Nulstil krydser
         </button>
       </div>
-      <div class="credits">Efter idé af 🤎🐻</div>
+      <div class="credits">
+        Efter idé af 🤎🐻
+      </div>
     </footer>
-    <div v-if="shareNotice" class="share-notice" aria-live="polite">
+    <div
+      v-if="shareNotice"
+      class="share-notice"
+      aria-live="polite"
+    >
       {{ shareNotice }}
     </div>
     <div
@@ -64,10 +88,16 @@
           {{ confirmCopy.message }}
         </p>
         <div class="confirm-actions">
-          <button class="confirm-cancel" @click="cancelConfirm">
+          <button
+            class="confirm-cancel"
+            @click="cancelConfirm"
+          >
             {{ confirmCopy.cancelLabel }}
           </button>
-          <button class="confirm-accept" @click="acceptConfirm">
+          <button
+            class="confirm-accept"
+            @click="acceptConfirm"
+          >
             {{ confirmCopy.confirmLabel }}
           </button>
         </div>
