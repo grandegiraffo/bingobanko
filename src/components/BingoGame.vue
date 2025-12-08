@@ -2,139 +2,306 @@
   <div class="bingo-container">
     <header class="bingo-header">
       <h1>🎄 Hallmark Julefilm Bingo 🎄</h1>
-      <p class="subtitle">Klik på felterne, når du ser scenerne</p>
+      <div class="subtitle">Klik på felterne, når du ser scenerne</div>
+      <div class="scoreboard">
+        <div class="score-label">Point</div>
+        <div class="score-value">
+          <span class="score-current">{{ markedCount }}</span>
+          <span class="score-divider">/</span>
+          <span class="score-total">{{ bingoSquares.length }}</span>
+        </div>
+      </div>
     </header>
-    
+
     <div class="bingo-grid">
-      <div 
-        v-for="(square, index) in bingoSquares" 
+      <div
+        v-for="(square, index) in bingoSquares"
         :key="index"
         class="bingo-square"
         :class="{ marked: square.marked }"
         @click="toggleSquare(index)"
       >
         <div class="square-content">
-          <div class="square-title">{{ square.title }}</div>
-          <div class="square-description">{{ square.description }}</div>
+          <div class="square-title">
+            {{ square.title }}
+          </div>
+          <div class="square-description">
+            {{ square.description }}
+          </div>
           <div v-if="square.marked" class="checkmark">✓</div>
         </div>
       </div>
     </div>
-    
+
     <footer class="bingo-footer">
-      <button @click="resetGame" class="reset-button">
-        🔄 Nulstil spil
-      </button>
-      <div class="credits">
-        Efter idé af 🤎🐻
+      <div class="button-group">
+        <button class="copy-link-button" @click="copyShareLink">
+          {{ shareButtonLabel }}
+        </button>
+        <button class="shuffle-button" @click="requestConfirm('shuffle')">
+          🔀 Bland felter
+        </button>
+        <button class="reset-button" @click="requestConfirm('reset')">
+          🔄 Nulstil krydser
+        </button>
       </div>
-      <div class="score">
-        {{ markedCount }} / {{ bingoSquares.length }} markeret
-      </div>
+      <div class="credits">Efter idé af 🤎🐻</div>
     </footer>
+    <div v-if="shareNotice" class="share-notice" aria-live="polite">
+      {{ shareNotice }}
+    </div>
+    <div
+      v-if="isConfirmOpen"
+      class="confirm-overlay"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="confirm-dialog">
+        <div class="confirm-title">
+          {{ confirmCopy.title }}
+        </div>
+        <p class="confirm-message">
+          {{ confirmCopy.message }}
+        </p>
+        <div class="confirm-actions">
+          <button class="confirm-cancel" @click="cancelConfirm">
+            {{ confirmCopy.cancelLabel }}
+          </button>
+          <button class="confirm-accept" @click="acceptConfirm">
+            {{ confirmCopy.confirmLabel }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { SquareTemplates } from "@/game-data/xmas-tv-tropes";
+import { BingoSquare } from "@/types/bingo-square";
+import { computed, onUnmounted, ref } from "vue";
 
-interface BingoSquare {
-  title: string
-  description: string
-  marked: boolean
-}
+type ConfirmableAction = "shuffle" | "reset";
 
-const squareTemplates: Array<Omit<BingoSquare, 'marked'>> = [
-  {
-    title: 'Hjembyens hjemkomst',
-    description:
-      'En travl storbykvinde vender modvilligt hjem til sin juleglade barndomsby - og møder naturligvis sin gamle flamme.'
-  },
-  {
-    title: 'Juletræ i fare',
-    description:
-      'Byens elskede juletræsfarm skal sælges eller lukkes - men måske kan kærlighed (og fundraising) redde den.'
-  },
-  {
-    title: 'Snevejr og skæbne',
-    description:
-      'Et uventet snefald fanger to personer sammen - og sneen smelter først, når deres hjerter gør det samme.'
-  },
-  {
-    title: 'Børns juleønske',
-    description:
-      'Et barn ønsker sig ikke legetøj, men at mor eller far skal finde kærligheden igen. Og det sker, selvfølgelig.'
-  },
-  {
-    title: 'Gamle breve, ny kærlighed',
-    description: 'Et arvet hus afslører kærlighedsbreve fra fortiden - og inspirerer til ny romance i nutiden.'
-  },
-  {
-    title: 'Mistelten-magi',
-    description: 'De skubber hinanden drillende under misteltenen - og det bliver til filmens første kys.'
-  },
-  {
-    title: 'Falsk forlovelse',
-    description: 'De lader som om de er et par til jul - men hvem bliver først klar over, at der er ægte følelser?'
-  },
-  {
-    title: 'Julens festival-fejde',
-    description:
-      'To rivaler tvinges til at planlægge byens julefestival sammen - og ender selvfølgelig med at forelske sig.'
-  },
-  {
-    title: 'Julehaderen',
-    description:
-      'En person, der hader alt ved jul, genfinder glæden (og kærligheden) via sne, peberkager og en ny partner.'
-  },
-  {
-    title: 'Prins incognito',
-    description: 'Den almindelige turist viser sig at være en royal - og det hele ender i slot, sne og kærlighed.'
-  },
-  {
-    title: 'Grinchen i jakkesæt',
-    description:
-      'En kold forretningsmand vil ødelægge julen - men bløder op takket ved byens charme og én bestemt person.'
-  },
-  {
-    title: "Ex'en vender tilbage",
-    description: 'En gammel ungdomskæreste dukker uventet op - og gnisten springer stadig.'
-  },
-  {
-    title: 'Bagekonkurrence-kaos',
-    description: 'En bagedyst møder sabotage, misforståelser og flirten, men kærligheden vinder alligevel.'
-  },
-  {
-    title: 'Julens fortryllelse',
-    description: 'Et magisk sneglobe, ønskeseddel eller mystisk bedstemor hjælper kærligheden på vej.'
-  },
-  {
-    title: 'Juleaften-frieri',
-    description: 'Hele byen samles, sneen daler, og nogen går ned på knæ og spørger: "Vil du gifte dig med mig?"'
+const ORDER_PARAM = "r";
+const baseTemplateIndices = SquareTemplates.map((_, index) => index);
+
+const encodeOrder = (order: number[]): string | null => {
+  if (typeof window === "undefined") return null;
+  const base = window.btoa(order.join(","));
+  return base.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+
+const decodeOrder = (value: string | null): number[] | null => {
+  if (!value || typeof window === "undefined") return null;
+  let normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  while (normalized.length % 4 !== 0) {
+    normalized += "=";
   }
-]
+  try {
+    const decoded = window.atob(normalized);
+    const indices = decoded.split(",").map((part) => Number.parseInt(part, 10));
+    if (indices.length !== baseTemplateIndices.length) return null;
+    const unique = new Set(indices);
+    const maxIndex = SquareTemplates.length - 1;
+    const hasInvalid = indices.some(
+      (idx) => Number.isNaN(idx) || idx < 0 || idx > maxIndex
+    );
+    return unique.size === indices.length && !hasInvalid ? indices : null;
+  } catch {
+    return null;
+  }
+};
 
-const createSquares = (): BingoSquare[] =>
-  squareTemplates.map((square) => ({
-    ...square,
-    marked: false
-  }))
+const persistOrder = (order: number[]) => {
+  if (typeof window === "undefined") return;
+  const encoded = encodeOrder(order);
+  if (!encoded) return;
+  const url = new URL(window.location.href);
+  url.searchParams.set(ORDER_PARAM, encoded);
+  window.history.replaceState({}, "", url);
+};
 
-const bingoSquares = ref<BingoSquare[]>(createSquares())
+const getOrderFromParam = (): number[] | null => {
+  if (typeof window === "undefined") return null;
+  const url = new URL(window.location.href);
+  const candidate = url.searchParams.get(ORDER_PARAM);
+  return decodeOrder(candidate);
+};
 
-const markedCount = computed(() =>
-  bingoSquares.value.filter((square) => square.marked).length
-)
+const shuffleOrder = (): number[] => {
+  const indices = [...baseTemplateIndices];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const swapIndex = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[swapIndex]] = [indices[swapIndex], indices[i]];
+  }
+  return indices;
+};
+
+// Persist a shareable board order so multiple viewers see the same layout.
+const resolveInitialOrder = (): number[] => {
+  const existingOrder = getOrderFromParam();
+  if (existingOrder) return existingOrder;
+  const randomizedOrder = shuffleOrder();
+  persistOrder(randomizedOrder);
+  return randomizedOrder;
+};
+
+const createSquares = (order: number[]): BingoSquare[] =>
+  order.map((templateIndex) => ({
+    ...SquareTemplates[templateIndex],
+    marked: false,
+  }));
+
+const currentOrder = ref<number[]>(resolveInitialOrder());
+const bingoSquares = ref<BingoSquare[]>(createSquares(currentOrder.value));
+
+const rebuildSquares = (order: number[]) => {
+  bingoSquares.value = createSquares(order);
+};
+
+const setNewOrder = (order: number[]) => {
+  currentOrder.value = order;
+  rebuildSquares(order);
+};
+
+const markedCount = computed(
+  () => bingoSquares.value.filter((square) => square.marked).length
+);
 
 const toggleSquare = (index: number) => {
-  const square = bingoSquares.value[index]
-  if (!square) return
-  square.marked = !square.marked
-}
+  const square = bingoSquares.value[index];
+  if (!square) return;
+  square.marked = !square.marked;
+};
 
-const resetGame = () => {
-  bingoSquares.value = createSquares()
-}
+const performReset = () => {
+  rebuildSquares(currentOrder.value);
+};
+
+const performShuffle = () => {
+  const order = shuffleOrder();
+  persistOrder(order);
+  setNewOrder(order);
+};
+
+const pendingAction = ref<ConfirmableAction | null>(null);
+
+const confirmCopy = computed(() => {
+  if (pendingAction.value === "shuffle") {
+    return {
+      title: "Blande felterne?",
+      message:
+        "Det giver et helt nyt bræt og et nyt delbart link. Markerede felter bliver nulstillet.",
+      confirmLabel: "Ja, bland",
+      cancelLabel: "Fortryd",
+    } as const;
+  }
+  if (pendingAction.value === "reset") {
+    return {
+      title: "Nulstil krydser?",
+      message: "Alle markeringer fjernes, men rækkefølgen forbliver den samme.",
+      confirmLabel: "Nulstil",
+      cancelLabel: "Behold",
+    } as const;
+  }
+  return {
+    title: "",
+    message: "",
+    confirmLabel: "OK",
+    cancelLabel: "Annuller",
+  } as const;
+});
+
+const isConfirmOpen = computed(() => pendingAction.value !== null);
+
+const requestConfirm = (action: ConfirmableAction) => {
+  pendingAction.value = action;
+};
+
+const cancelConfirm = () => {
+  pendingAction.value = null;
+};
+
+const acceptConfirm = () => {
+  if (pendingAction.value === "shuffle") {
+    performShuffle();
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  } else if (pendingAction.value === "reset") {
+    performReset();
+  }
+  pendingAction.value = null;
+};
+
+const shareStatus = ref<"idle" | "copied" | "error">("idle");
+const shareNotice = ref<string>("");
+let shareResetTimer: number | null = null;
+
+const shareButtonLabel = computed(() => {
+  if (shareStatus.value === "copied") return "📋 Kopieret";
+  if (shareStatus.value === "error") return "⚠️ Fejl";
+  return "🔗 Del link";
+});
+
+const clearShareTimer = () => {
+  if (shareResetTimer !== null) {
+    if (typeof window !== "undefined") {
+      window.clearTimeout(shareResetTimer);
+    } else {
+      clearTimeout(shareResetTimer);
+    }
+    shareResetTimer = null;
+  }
+};
+
+const scheduleShareReset = () => {
+  clearShareTimer();
+  if (typeof window === "undefined") return;
+  shareResetTimer = window.setTimeout(() => {
+    shareStatus.value = "idle";
+    shareNotice.value = "";
+    shareResetTimer = null;
+  }, 2500);
+};
+
+const setShareFeedback = (status: "copied" | "error", message: string) => {
+  shareStatus.value = status;
+  shareNotice.value = message;
+  scheduleShareReset();
+};
+
+const copyShareLink = async () => {
+  if (typeof window === "undefined") return;
+  const url = window.location.href;
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+    setShareFeedback("copied", "");
+  } catch {
+    setShareFeedback(
+      "error",
+      "⚠️ Noget gik galt. Systemet kunne ikke kopiere link. ⚠️"
+    );
+  }
+};
+
+onUnmounted(() => {
+  clearShareTimer();
+});
 </script>
 
 <style scoped>
@@ -164,6 +331,62 @@ const resetGame = () => {
   margin: 0;
   opacity: 0.9;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.scoreboard {
+  margin: 20px auto 0;
+  padding: 12px 24px 16px;
+  background: radial-gradient(circle at 20% 20%, #1c2a38, #08111b 70%);
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4),
+    inset 0 0 30px rgba(11, 24, 38, 0.8);
+  width: min(420px, 100%);
+  text-align: center;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 6px;
+}
+
+.score-value {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 14px;
+  font-family: "Share Tech Mono", "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  color: #f5f7fa;
+}
+
+.score-current,
+.score-total {
+  font-size: 2.4rem;
+  line-height: 1;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #0f1f2f, #01060c);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 64px;
+}
+
+.score-current {
+  color: #7cf4ae;
+  text-shadow: 0 0 12px rgba(124, 244, 174, 0.6);
+}
+
+.score-total {
+  color: #fa5549;
+  text-shadow: 0 0 12px rgba(249, 209, 91, 0.5);
+}
+
+.score-divider {
+  font-size: 2rem;
+  opacity: 0.4;
 }
 
 .bingo-grid {
@@ -244,47 +467,160 @@ const resetGame = () => {
 
 .bingo-footer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 20px;
-  flex-wrap: wrap;
+  text-align: center;
 }
 
-.reset-button {
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: min(100%, 720px);
+  margin: 0 auto;
+}
+
+.reset-button,
+.shuffle-button {
   background: #fff;
   color: #1a472a;
   border: none;
   padding: 15px 30px;
   font-size: 1.1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.reset-button:hover {
+.reset-button:hover,
+.shuffle-button:hover {
   background: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-.reset-button:active {
+.reset-button:active,
+.shuffle-button:active {
   transform: translateY(0);
 }
 
-.score {
-  color: white;
-  font-size: 1.3rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+.reset-button,
+.shuffle-button {
+  background: #05180b;
+  color: #2e8b4f;
+}
+
+.copy-link-button {
+  background: linear-gradient(135deg, #ffdd55, #ffb347);
+  color: #0a1b2b;
+  border: 2px solid rgba(10, 27, 43, 0.15);
+  padding: 15px 34px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 20px rgba(255, 179, 71, 0.35);
+}
+
+.copy-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(255, 179, 71, 0.45);
+  background: linear-gradient(135deg, #ffe067, #ffc46a);
+}
+
+.copy-link-button:active {
+  transform: translateY(0);
 }
 
 .credits {
+  text-align: center;
   color: white;
   font-size: 1rem;
   font-weight: 600;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.share-notice {
+  margin: 10px auto 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.95rem;
+  text-align: center;
+  max-width: 320px;
+}
+
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.confirm-dialog {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 28px;
+  width: min(420px, 100%);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.confirm-title {
+  font-size: 1.35rem;
+  margin: 0 0 12px 0;
+  color: #0f1f2f;
+}
+
+.confirm-message {
+  margin: 0 0 22px 0;
+  color: #35424b;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.confirm-cancel,
+.confirm-accept {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.confirm-cancel {
+  background: #eef2f5;
+  color: #1f2d3b;
+}
+
+.confirm-accept {
+  background: linear-gradient(135deg, #17633b, #0f3d24);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 61, 36, 0.35);
+}
+
+.confirm-cancel:hover,
+.confirm-accept:hover {
+  transform: translateY(-1px);
 }
 
 /* Mobile optimizations */
@@ -292,44 +628,58 @@ const resetGame = () => {
   .bingo-container {
     padding: 15px;
   }
-  
+
   .bingo-header h1 {
     font-size: 1.8rem;
   }
-  
+
   .subtitle {
     font-size: 1rem;
   }
-  
+
   .bingo-grid {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+
   .bingo-square {
     min-height: 120px;
     padding: 15px;
   }
-  
+
   .square-title {
     font-size: 1rem;
   }
-  
+
   .square-description {
     font-size: 0.8rem;
   }
-  
+
   .checkmark {
     width: 35px;
     height: 35px;
     font-size: 20px;
   }
-  
-  .reset-button {
+
+  .scoreboard {
+    width: 100%;
+  }
+
+  .score-value {
+    flex-wrap: wrap;
+  }
+
+  .reset-button,
+  .shuffle-button {
     padding: 12px 24px;
     font-size: 1rem;
   }
-  
+
+  .copy-link-button {
+    width: 100%;
+    justify-content: center;
+  }
+
   .score {
     font-size: 1.1rem;
   }
@@ -340,16 +690,16 @@ const resetGame = () => {
   .bingo-container {
     padding: 30px;
   }
-  
+
   .bingo-header h1 {
     font-size: 3rem;
   }
-  
+
   .bingo-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
-  
+
   .bingo-square {
     min-height: 160px;
     padding: 25px;
@@ -361,9 +711,13 @@ const resetGame = () => {
   .bingo-grid {
     grid-template-columns: repeat(5, 1fr);
   }
-  
+
   .bingo-square {
     min-height: 180px;
+  }
+
+  .checkmark {
+    top: -28px;
   }
 }
 </style>

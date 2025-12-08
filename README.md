@@ -1,6 +1,6 @@
-# Hallmark Julefilm Bingo 🎄
+# 🎄 Hallmark Julefilm Bingo 🎄
 
-A Vue.js bingo game app for iPad and mobile web featuring classic Hallmark Christmas movie tropes in Danish.
+A bingo game app built using Vue.js and TypeScript for iPad and mobile web featuring classic Hallmark Christmas movie tropes in Danish.
 
 ## Features
 
@@ -30,32 +30,36 @@ A Vue.js bingo game app for iPad and mobile web featuring classic Hallmark Chris
 
 ## Technology Stack
 
-- **Vue.js 3.5.24** - Progressive JavaScript framework
-- **Vite 7.2.6** - Fast build tool and dev server
+- **Vue.js 3** - Progressive JavaScript framework
+- **Vite** - Fast build tool and dev server
 - **Pure CSS** - No external styling dependencies
 - **Responsive Design** - Mobile-first approach
+- **TypeScript** - Strongly typed JavaScript
+- **ESLint** - Code quality and consistency
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js (v24 LTS)
+- npm (v11 or higher)
 
 ### Installation
 
 ```bash
-# Install dependencies
+# Install dependencies:
 npm install
 
-# Start development server
+# Start local development server:
 npm run dev
+```
 
-# Build for production
+### Building for Production
+
+```bash
+# Build for production is automatically handled by GitHub Actions and Pages on merges to main branch
+# But to build locally, run:
 npm run build
-
-# Preview production build
-npm run preview
 ```
 
 ## Usage
