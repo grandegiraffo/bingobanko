@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BingoGame from './components/BingoGame.vue'
+import BingoGame from './components/bingo-game.vue'
 </script>
 
 <template>
