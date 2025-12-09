@@ -26,6 +26,16 @@
         @click="toggleSquare(index)"
       >
         <div class="square-content">
+          <div
+            class="square-category"
+            aria-hidden="true"
+          >
+            <HugeiconsIcon
+              :icon="getCategoryIcon(square.category)"
+              :size="28"
+              absolute-stroke-width
+            />
+          </div>
           <div class="square-title">
             {{ square.title }}
           </div>
@@ -107,6 +117,15 @@
 </template>
 
 <script setup lang="ts">
+import { HugeiconsIcon } from "@hugeicons/vue";
+import {
+  FlowchartIcon,
+  GitBranchIcon,
+  QuotesIcon,
+  SearchVisualIcon,
+  TropicalStormIcon,
+  UserStoryIcon,
+} from "@hugeicons/core-free-icons";
 import { XmasTVTropes } from "@/game-data/xmas-tv-tropes";
 import { BingoSquare } from "@/types/bingo-square";
 import { computed, onUnmounted, ref } from "vue";
@@ -117,13 +136,12 @@ const MAX_BOARD_SIZE = 15;
 const boardSize = Math.min(MAX_BOARD_SIZE, XmasTVTropes.length);
 const ORDER_PARAM = "r";
 const allTemplateIds = XmasTVTropes.map((template) => template.id);
-const templateById = XmasTVTropes.reduce<Record<string, Omit<BingoSquare, "marked">>>(
-  (acc, template) => {
-    acc[template.id] = template;
-    return acc;
-  },
-  {}
-);
+const templateById = XmasTVTropes.reduce<
+  Record<string, Omit<BingoSquare, "marked">>
+>((acc, template) => {
+  acc[template.id] = template;
+  return acc;
+}, {});
 
 const encodeOrder = (order: string[]): string | null => {
   if (typeof window === "undefined") return null;
@@ -198,6 +216,22 @@ const createSquares = (order: string[]): BingoSquare[] => {
     };
   });
 };
+
+type CategoryIcon = typeof FlowchartIcon;
+
+const categoryIconMap: Partial<Record<BingoSquare["category"], CategoryIcon>> =
+  {
+    mainPlot: FlowchartIcon,
+    subPlot: GitBranchIcon,
+    character: UserStoryIcon,
+    visual: SearchVisualIcon,
+    quote: QuotesIcon,
+    meta: TropicalStormIcon,
+  };
+
+const defaultCategoryIcon: CategoryIcon = TropicalStormIcon;
+const getCategoryIcon = (category: BingoSquare["category"]) =>
+  categoryIconMap[category] ?? defaultCategoryIcon;
 
 const currentOrder = ref<string[]>(resolveInitialOrder());
 const bingoSquares = ref<BingoSquare[]>(createSquares(currentOrder.value));
