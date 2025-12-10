@@ -43,8 +43,13 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build project
+      - name: Build
         run: npm run build
+        env:
+          CI: true
+
+      - name: Tests with coverage
+        run: npm run test:coverage
         env:
           CI: true
 

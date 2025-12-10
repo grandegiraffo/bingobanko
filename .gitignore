@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Copilot-Processing.md is temporary and should be ignored
+Copilot-Processing.md
+
+# Test coverage reports
+coverage
