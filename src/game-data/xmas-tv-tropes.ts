@@ -18,7 +18,7 @@ export const GameName = "🎄 Hallmark Julefilm Bingo 🎄";
  * IDs were generated using https://shortunique.id/#md:use-in-cli
  *  npm install --global short-unique-id
  *  for i in {1..15}; do suid -l 10; done
- * @returns {Array<Omit<BingoSquare, 'marked'>>} Array of bingo squares without the 'marked' property
+ * Array of bingo squares without the 'marked' property.
  */
 export const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
