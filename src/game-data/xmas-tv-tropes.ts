@@ -3,7 +3,7 @@ import { BingoSquare } from "@/types/bingo-square";
 /**
  * Unique identifier for the Bingo Game
  */
-export const GameId = "xmas";
+export const GameId = "xmas-tv-tropes";
 
 /**
  * Name of the Bingo Game
