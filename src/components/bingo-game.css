@@ -26,6 +26,37 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.game-select {
+  margin: 14px auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.game-select-label {
+  color: white;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-select-input {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  color: #08111b;
+  cursor: pointer;
+}
+
+.game-select-input:focus {
+  outline: 3px solid rgba(255, 221, 85, 0.6);
+  outline-offset: 2px;
+}
+
 .scoreboard {
   margin: 20px auto 0;
   padding: 12px 24px 16px;

@@ -1,6 +1,16 @@
 import { BingoSquare } from "@/types/bingo-square";
 
 /**
+ * Unique identifier for the Bingo Game
+ */
+export const GameId = "xmas";
+
+/**
+ * Name of the Bingo Game
+ */
+export const GameName = "🎄 Hallmark Julefilm Bingo 🎄";
+
+/**
  * Xmas Romance Movie Tropes Bingo Squares
  * These tropes are commonly found in Christmas romance movies.
  * Each trope has a unique ID, title, description, and category.
@@ -8,10 +18,9 @@ import { BingoSquare } from "@/types/bingo-square";
  * IDs were generated using https://shortunique.id/#md:use-in-cli
  *  npm install --global short-unique-id
  *  for i in {1..15}; do suid -l 10; done
- * @module XmasTVTropes
  * @returns {Array<Omit<BingoSquare, 'marked'>>} Array of bingo squares without the 'marked' property
  */
-export const XmasTVTropes: Array<Omit<BingoSquare, "marked">> = [
+export const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "WO4GFxFzjh",
     title: "Den lokale handyman",
