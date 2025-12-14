@@ -158,6 +158,7 @@ const MAX_BOARD_SIZE = 15;
 type GameId = string;
 
 type GameModule = {
+  GameId: string;
   GameName: string;
   GameSquares: Array<Omit<BingoSquare, "marked">>;
 };
