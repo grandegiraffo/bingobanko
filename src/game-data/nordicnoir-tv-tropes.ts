@@ -11,11 +11,10 @@ export const GameId = "nordicnoir-tv-tropes";
 export const GameName = "🌧️ Nordisk Noir Bingo ❄️";
 
 /**
- * Nordic Noir TV Tropes Bingo Squares
+ * Nordic Noir TV Tropes Bingo Squares.
  * These tropes are commonly found in Scandinavian crime dramas.
  * Each trope has a unique ID, title, description, and category.
- *
- * @returns {Array<Omit<BingoSquare, 'marked'>>} Array of bingo squares without the 'marked' property
+ * Array of bingo squares without the 'marked' property.
  */
 export const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
