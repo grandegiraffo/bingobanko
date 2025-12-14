@@ -1,7 +1,7 @@
 <template>
   <div class="bingo-container">
     <header class="bingo-header">
-      <h1>{{ selectedGame.name }}</h1>
+      <h1>{{ selectedGame?.name || 'Ukendt spil' }}</h1>
       
       <div class="subtitle">
         Klik på felterne, når du ser scenerne
