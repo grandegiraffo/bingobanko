@@ -351,7 +351,7 @@ const selectedGame = computed(() => gamesById[selectedGameId.value]);
 
 const currentOrder = ref<string[]>(resolveInitialOrder(selectedGameId.value));
 const bingoSquares = ref<BingoSquare[]>(
-  createSquares(selectedGame.value ?? { id: "", name: "", squares: [], allTemplateIds: [], templateById: {} }, currentOrder.value)
+  createSquares(selectedGame.value, currentOrder.value)
 );
 
 const rebuildSquares = (order: string[]) => {
