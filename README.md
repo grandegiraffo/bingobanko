@@ -31,12 +31,16 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 
 ### Prerequisites
 
-- Node.js (v24 LTS)
-- npm (v11 or higher)
+- [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) to manage Node.js versions
+- [Node.js](https://nodejs.org/) (v24 LTS)
+- [Javascript package manager (npm)](https://docs.npmjs.com/cli/v11/configuring-npm/package-json) (v11) comes with Node.js
 
 ### Installation
 
 ```bash
+# Install the correct version of Node.js via the `.nvmrc` file
+nvm use 
+
 # Install dependencies
 npm install
 
