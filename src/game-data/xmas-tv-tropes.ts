@@ -1,14 +1,15 @@
-import { BingoSquare } from "@/types/bingo-square";
+import type { BingoGame } from "@/types/bingo-game-module";
+import type { BingoSquare } from "@/types/bingo-square";
 
 /**
  * Unique identifier for the Bingo Game
  */
-export const GameId = "xmas-tv-tropes";
+const GameId = "xmas-tv-tropes";
 
 /**
  * Name of the Bingo Game
  */
-export const GameName = "🎄 Hallmark Julefilm Bingo 🎄";
+const GameName = "🎄 Hallmark Julefilm Bingo 🎄";
 
 /**
  * Xmas Romance Movie Tropes Bingo Squares
@@ -20,7 +21,7 @@ export const GameName = "🎄 Hallmark Julefilm Bingo 🎄";
  *  for i in {1..15}; do suid -l 10; done
  * Array of bingo squares without the 'marked' property.
  */
-export const GameSquares: Array<Omit<BingoSquare, "marked">> = [
+const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "WO4GFxFzjh",
     title: "Den lokale handyman",
@@ -541,3 +542,9 @@ export const GameSquares: Array<Omit<BingoSquare, "marked">> = [
     category: "visual",
   },
 ];
+
+export const GameModule: BingoGame = {
+  GameId,
+  GameName,
+  GameSquares,
+};

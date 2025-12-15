@@ -149,6 +149,7 @@ import {
   UserStoryIcon,
 } from "@hugeicons/core-free-icons";
 import { BingoSquare } from "@/types/bingo-square";
+import type { BingoGameDataModule } from "@/types/bingo-game-module";
 import { computed, onUnmounted, ref, watch } from "vue";
 
 type ConfirmableAction = "shuffle" | "reset";
@@ -156,12 +157,6 @@ type ConfirmableAction = "shuffle" | "reset";
 const MAX_BOARD_SIZE = 15;
 
 type GameId = string;
-
-type GameModule = {
-  GameId: string;
-  GameName: string;
-  GameSquares: Array<Omit<BingoSquare, "marked">>;
-};
 
 type GameDefinition = {
   id: GameId;
@@ -195,14 +190,15 @@ const buildGameDefinition = (
   return { id, name, squares, allTemplateIds, templateById };
 };
 
-const gameModules = import.meta.glob<GameModule>("../game-data/*.ts", {
+const gameModules = import.meta.glob<BingoGameDataModule>("../game-data/*.ts", {
   eager: true,
 });
 
 const gamesById = Object.entries(gameModules).reduce<Record<string, GameDefinition>>(
   (acc, [path, mod]) => {
-    const id = deriveGameIdFromPath(path);
-    acc[id] = buildGameDefinition(id, mod.GameName, mod.GameSquares);
+    const game = mod.GameModule;
+    const id = game?.GameId ?? deriveGameIdFromPath(path);
+    acc[id] = buildGameDefinition(id, game.GameName, game.GameSquares);
     return acc;
   },
   {}
