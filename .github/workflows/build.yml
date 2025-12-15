@@ -10,9 +10,6 @@ on:
       - reopened
       - ready_for_review
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
