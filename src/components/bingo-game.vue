@@ -1,7 +1,8 @@
 <template>
   <div class="bingo-container">
     <header class="bingo-header">
-      <h1>🎄 Hallmark Julefilm Bingo 🎄</h1>
+      <h1>{{ selectedGame?.name || 'Ukendt spil' }}</h1>
+      
       <div class="subtitle">
         Klik på felterne, når du ser scenerne
       </div>
@@ -72,6 +73,27 @@
         >
           🔄 Nulstil krydser
         </button>
+        <div class="game-select">
+          <label
+            class="game-select-label"
+            for="game-select"
+          >
+            Vælg spil
+          </label>
+          <select
+            id="game-select"
+            v-model="selectedGameId"
+            class="game-select-input"
+          >
+            <option
+              v-for="game in availableGames"
+              :key="game.id"
+              :value="game.id"
+            >
+              {{ game.name }}
+            </option>
+          </select>
+        </div>
       </div>
       <div class="credits">
         Efter idé af 🤎🐻
@@ -126,22 +148,73 @@ import {
   TropicalStormIcon,
   UserStoryIcon,
 } from "@hugeicons/core-free-icons";
-import { XmasTVTropes } from "@/game-data/xmas-tv-tropes";
 import { BingoSquare } from "@/types/bingo-square";
-import { computed, onUnmounted, ref } from "vue";
+import type { BingoGameDataModule } from "@/types/bingo-game-module";
+import { computed, onUnmounted, ref, watch } from "vue";
 
 type ConfirmableAction = "shuffle" | "reset";
 
 const MAX_BOARD_SIZE = 15;
-const boardSize = Math.min(MAX_BOARD_SIZE, XmasTVTropes.length);
+
+type GameId = string;
+
+type GameDefinition = {
+  id: GameId;
+  name: string;
+  squares: Array<Omit<BingoSquare, "marked">>;
+  allTemplateIds: string[];
+  templateById: Record<string, Omit<BingoSquare, "marked">>;
+};
+
+const GAME_PARAM = "g";
 const ORDER_PARAM = "r";
-const allTemplateIds = XmasTVTropes.map((template) => template.id);
-const templateById = XmasTVTropes.reduce<
-  Record<string, Omit<BingoSquare, "marked">>
->((acc, template) => {
-  acc[template.id] = template;
-  return acc;
-}, {});
+
+const deriveGameIdFromPath = (path: string): string => {
+  const match = path.match(/([^/]+)\.ts$/);
+  return match?.[1] ?? path;
+};
+
+const buildGameDefinition = (
+  id: GameId,
+  name: string,
+  squares: Array<Omit<BingoSquare, "marked">>
+): GameDefinition => {
+  const allTemplateIds = squares.map((template) => template.id);
+  const templateById = squares.reduce<Record<string, Omit<BingoSquare, "marked">>>(
+    (acc, template) => {
+      acc[template.id] = template;
+      return acc;
+    },
+    {}
+  );
+  return { id, name, squares, allTemplateIds, templateById };
+};
+
+const gameModules = import.meta.glob<BingoGameDataModule>("../game-data/*.ts", {
+  eager: true,
+});
+
+const gamesById = Object.entries(gameModules).reduce<Record<string, GameDefinition>>(
+  (acc, [path, mod]) => {
+    const game = mod.GameModule;
+    const id = game?.GameId ?? deriveGameIdFromPath(path);
+    acc[id] = buildGameDefinition(id, game.GameName, game.GameSquares);
+    return acc;
+  },
+  {}
+);
+
+const availableGames = computed(() =>
+  Object.values(gamesById).sort((a, b) => a.name.localeCompare(b.name))
+);
+
+const defaultGameId = computed(() => {
+  if (gamesById["xmas-tv-tropes"]) return "xmas-tv-tropes";
+  return availableGames.value[0]?.id ?? "xmas-tv-tropes";
+});
+
+const getBoardSize = (game: GameDefinition) =>
+  Math.min(MAX_BOARD_SIZE, game.squares.length);
 
 const encodeOrder = (order: string[]): string | null => {
   if (typeof window === "undefined") return null;
@@ -149,7 +222,11 @@ const encodeOrder = (order: string[]): string | null => {
   return base.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
-const decodeOrder = (value: string | null): string[] | null => {
+const decodeOrder = (
+  value: string | null,
+  game: GameDefinition
+): string[] | null => {
+  const boardSize = getBoardSize(game);
   if (boardSize === 0) return [];
   if (!value || typeof window === "undefined") return null;
   let normalized = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -161,33 +238,51 @@ const decodeOrder = (value: string | null): string[] | null => {
     const ids = decoded.split(",");
     if (ids.length !== boardSize) return null;
     const unique = new Set(ids);
-    const hasInvalid = ids.some((id) => !templateById[id]);
+    const hasInvalid = ids.some((id) => !game.templateById[id]);
     return unique.size === ids.length && !hasInvalid ? ids : null;
   } catch {
     return null;
   }
 };
 
-const persistOrder = (order: string[]) => {
+const persistGameAndOrder = (gameId: GameId, order: string[]) => {
+  const game = gamesById[gameId];
+  if (!game) return;
+  const boardSize = getBoardSize(game);
   if (boardSize === 0) return;
   if (typeof window === "undefined") return;
   const encoded = encodeOrder(order);
   if (!encoded) return;
   const url = new URL(window.location.href);
-  url.searchParams.set(ORDER_PARAM, encoded);
+  const preservedEntries: Array<[string, string]> = [];
+  for (const [key, value] of url.searchParams.entries()) {
+    if (key === GAME_PARAM || key === ORDER_PARAM) continue;
+    preservedEntries.push([key, value]);
+  }
+
+  const nextParams = new URLSearchParams();
+  nextParams.set(GAME_PARAM, gameId);
+  nextParams.set(ORDER_PARAM, encoded);
+  for (const [key, value] of preservedEntries) {
+    nextParams.append(key, value);
+  }
+
+  url.search = nextParams.toString();
   window.history.replaceState({}, "", url);
 };
 
-const getOrderFromParam = (): string[] | null => {
+const getOrderFromParam = (game: GameDefinition): string[] | null => {
+  const boardSize = getBoardSize(game);
   if (boardSize === 0) return [];
   if (typeof window === "undefined") return null;
   const url = new URL(window.location.href);
   const candidate = url.searchParams.get(ORDER_PARAM);
-  return decodeOrder(candidate);
+  return decodeOrder(candidate, game);
 };
 
-const shuffleOrder = (): string[] => {
-  const ids = [...allTemplateIds];
+const shuffleOrder = (game: GameDefinition): string[] => {
+  const boardSize = getBoardSize(game);
+  const ids = [...game.allTemplateIds];
   for (let i = ids.length - 1; i > 0; i--) {
     const swapIndex = Math.floor(Math.random() * (i + 1));
     [ids[i], ids[swapIndex]] = [ids[swapIndex], ids[i]];
@@ -195,21 +290,35 @@ const shuffleOrder = (): string[] => {
   return ids.slice(0, boardSize);
 };
 
+const resolveInitialGameId = (): GameId => {
+  if (typeof window === "undefined") return defaultGameId.value;
+  const url = new URL(window.location.href);
+  const candidate = url.searchParams.get(GAME_PARAM);
+  if (candidate && gamesById[candidate]) return candidate;
+  return defaultGameId.value;
+};
+
 // Persist a shareable board order so multiple viewers see the same layout.
-const resolveInitialOrder = (): string[] => {
+const resolveInitialOrder = (gameId: GameId): string[] => {
+  const game = gamesById[gameId];
+  if (!game) return [];
+  const boardSize = getBoardSize(game);
   if (boardSize === 0) return [];
-  const existingOrder = getOrderFromParam();
-  if (existingOrder) return existingOrder;
-  const randomizedOrder = shuffleOrder();
-  persistOrder(randomizedOrder);
+  const existingOrder = getOrderFromParam(game);
+  if (existingOrder) {
+    persistGameAndOrder(gameId, existingOrder);
+    return existingOrder;
+  }
+  const randomizedOrder = shuffleOrder(game);
+  persistGameAndOrder(gameId, randomizedOrder);
   return randomizedOrder;
 };
 
-const createSquares = (order: string[]): BingoSquare[] => {
-  const fallbackTemplate = XmasTVTropes[0];
+const createSquares = (game: GameDefinition, order: string[]): BingoSquare[] => {
+  const fallbackTemplate = game.squares[0];
   if (!fallbackTemplate) return [];
   return order.map((templateId) => {
-    const template = templateById[templateId] ?? fallbackTemplate;
+    const template = game.templateById[templateId] ?? fallbackTemplate;
     return {
       ...template,
       marked: false,
@@ -233,11 +342,21 @@ const defaultCategoryIcon: CategoryIcon = TropicalStormIcon;
 const getCategoryIcon = (category: BingoSquare["category"]) =>
   categoryIconMap[category] ?? defaultCategoryIcon;
 
-const currentOrder = ref<string[]>(resolveInitialOrder());
-const bingoSquares = ref<BingoSquare[]>(createSquares(currentOrder.value));
+const selectedGameId = ref<GameId>(resolveInitialGameId());
+const selectedGame = computed(() => gamesById[selectedGameId.value]);
+
+const currentOrder = ref<string[]>(resolveInitialOrder(selectedGameId.value));
+const bingoSquares = ref<BingoSquare[]>(
+  createSquares(selectedGame.value, currentOrder.value)
+);
 
 const rebuildSquares = (order: string[]) => {
-  bingoSquares.value = createSquares(order);
+  const game = selectedGame.value;
+  if (!game) {
+    bingoSquares.value = [];
+    return;
+  }
+  bingoSquares.value = createSquares(game, order);
 };
 
 const setNewOrder = (order: string[]) => {
@@ -260,10 +379,21 @@ const performReset = () => {
 };
 
 const performShuffle = () => {
-  const order = shuffleOrder();
-  persistOrder(order);
+  const game = selectedGame.value;
+  if (!game) return;
+  const order = shuffleOrder(game);
+  persistGameAndOrder(selectedGameId.value, order);
   setNewOrder(order);
 };
+
+watch(selectedGameId, (newGameId, oldGameId) => {
+  if (newGameId === oldGameId) return;
+  const game = gamesById[newGameId];
+  if (!game) return;
+  const order = shuffleOrder(game);
+  persistGameAndOrder(newGameId, order);
+  setNewOrder(order);
+});
 
 const pendingAction = ref<ConfirmableAction | null>(null);
 

@@ -10,6 +10,33 @@ describe('BingoGame', () => {
     }
   })
 
+  it('should default to xmas and persist g before r in the URL', async () => {
+    const wrapper = mount(BingoGame)
+    await wrapper.vm.$nextTick()
+
+    const select = wrapper.find('#game-select')
+    expect(select.exists()).toBe(true)
+    expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
+
+    expect(window.location.search.startsWith('?g=xmas-tv-tropes&r=')).toBe(true)
+  })
+
+  it('should switch games via dropdown and update the URL g parameter', async () => {
+    const wrapper = mount(BingoGame)
+    await wrapper.vm.$nextTick()
+
+    const select = wrapper.find('#game-select')
+    expect(select.exists()).toBe(true)
+
+    await select.setValue('nordicnoir-tv-tropes')
+    await wrapper.vm.$nextTick()
+
+    expect(window.location.search.startsWith('?g=nordicnoir-tv-tropes&r=')).toBe(true)
+
+    const squares = wrapper.findAll('.bingo-square')
+    expect(squares.length).toBe(15)
+  })
+
   it('should toggle square marked state when clicked', async () => {
     const wrapper = mount(BingoGame)
 
