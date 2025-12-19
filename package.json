@@ -23,7 +23,7 @@
     "@types/node": "^24.10.3",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vitest/coverage-v8": "^4.0.15",
-    "@vitest/ui": "^4.0.15",
+    "@vitest/ui": "^4.0.16",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.12.0",
