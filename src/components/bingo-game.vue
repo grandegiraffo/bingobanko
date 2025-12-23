@@ -82,8 +82,9 @@
           </label>
           <select
             id="game-select"
-            v-model="selectedGameId"
+            :value="selectedGameId"
             class="game-select-input"
+            @change="onGameSelectChange"
           >
             <option
               v-for="game in availableGames"
@@ -152,7 +153,7 @@ import { BingoSquare } from "@/types/bingo-square";
 import type { BingoGameDataModule } from "@/types/bingo-game-module";
 import { computed, onUnmounted, ref, watch } from "vue";
 
-type ConfirmableAction = "shuffle" | "reset";
+type ConfirmableAction = "shuffle" | "reset" | "changeGame";
 
 const MAX_BOARD_SIZE = 15;
 
@@ -386,6 +387,8 @@ const performShuffle = () => {
   setNewOrder(order);
 };
 
+const pendingGameId = ref<GameId | null>(null);
+
 watch(selectedGameId, (newGameId, oldGameId) => {
   if (newGameId === oldGameId) return;
   const game = gamesById[newGameId];
@@ -415,6 +418,14 @@ const confirmCopy = computed(() => {
       cancelLabel: "Behold",
     } as const;
   }
+  if (pendingAction.value === "changeGame") {
+    return {
+      title: "Skift spil?",
+      message: "Dette vil starte et nyt spil. Markerede felter bliver nulstillet.",
+      confirmLabel: "Skift spil",
+      cancelLabel: "Fortryd",
+    } as const;
+  }
   return {
     title: "",
     message: "",
@@ -430,6 +441,10 @@ const requestConfirm = (action: ConfirmableAction) => {
 };
 
 const cancelConfirm = () => {
+  if (pendingAction.value === "changeGame" && pendingGameId.value !== null) {
+    // Reset the select back to the current game
+    pendingGameId.value = null;
+  }
   pendingAction.value = null;
 };
 
@@ -441,8 +456,25 @@ const acceptConfirm = () => {
     }
   } else if (pendingAction.value === "reset") {
     performReset();
+  } else if (pendingAction.value === "changeGame" && pendingGameId.value !== null) {
+    selectedGameId.value = pendingGameId.value;
+    pendingGameId.value = null;
   }
   pendingAction.value = null;
+};
+
+const onGameSelectChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement;
+  const newGameId = target.value;
+  
+  if (newGameId === selectedGameId.value) return;
+  
+  // Store the pending game ID and request confirmation
+  pendingGameId.value = newGameId;
+  requestConfirm("changeGame");
+  
+  // Reset the select back to the current game until confirmed
+  target.value = selectedGameId.value;
 };
 
 const shareStatus = ref<"idle" | "copied" | "error">("idle");
