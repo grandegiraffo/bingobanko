@@ -465,7 +465,7 @@ const acceptConfirm = () => {
 
 const onGameSelectChange = (event: Event) => {
   const target = event.target as HTMLSelectElement;
-  const newGameId = target.value;
+  const newGameId = target.value as GameId;
   
   if (newGameId === selectedGameId.value) return;
   
