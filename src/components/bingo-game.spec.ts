@@ -28,9 +28,17 @@ describe('BingoGame', () => {
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
 
+    // Change the game selection
     await select.setValue('nordicnoir-tv-tropes')
     await wrapper.vm.$nextTick()
 
+    // Confirm dialog should appear
+    const confirmButton = wrapper.find('.confirm-accept')
+    expect(confirmButton.exists()).toBe(true)
+    await confirmButton.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    // After confirmation, the URL should be updated
     expect(window.location.search.startsWith('?g=nordicnoir-tv-tropes&r=')).toBe(true)
 
     const squares = wrapper.findAll('.bingo-square')
@@ -115,5 +123,34 @@ describe('BingoGame', () => {
     // It's extremely unlikely that a random shuffle produces the exact same order
     const orderChanged = initialTitles.some((title, index) => title !== shuffledTitles[index])
     expect(orderChanged).toBe(true)
+  })
+
+  it('should show confirmation dialog when changing game and keep current game on cancel', async () => {
+    const wrapper = mount(BingoGame)
+    await wrapper.vm.$nextTick()
+
+    const select = wrapper.find('#game-select')
+    expect(select.exists()).toBe(true)
+
+    // Initially should be xmas-tv-tropes
+    expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
+
+    // Try to change the game
+    await select.setValue('nordicnoir-tv-tropes')
+    await wrapper.vm.$nextTick()
+
+    // Confirm dialog should appear
+    const confirmDialog = wrapper.find('.confirm-dialog')
+    expect(confirmDialog.exists()).toBe(true)
+
+    // Cancel the change
+    const cancelButton = wrapper.find('.confirm-cancel')
+    expect(cancelButton.exists()).toBe(true)
+    await cancelButton.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    // Game should remain xmas-tv-tropes
+    expect(window.location.search.startsWith('?g=xmas-tv-tropes&r=')).toBe(true)
+    expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
   })
 })
