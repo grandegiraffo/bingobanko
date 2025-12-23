@@ -10,7 +10,7 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 - **TypeScript** - Strict mode enabled
 - **Vite** - Build tool and dev server
 - **Vitest** - Unit testing framework
-- **Happy DOM** - Test environment
+- **happy-dom** - Test environment
 - **ESLint** - Code linting with TypeScript and Vue plugins
 - **GitHub Actions** - CI/CD pipeline
 - **GitHub Pages** - Production hosting
@@ -41,7 +41,7 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 
 - Strict mode is enabled - follow strict type checking
 - Target: ES2022
-- Use `type` for type definitions instead of `interface` when appropriate
+- Use `type` for unions, primitives, and computed types; use `interface` for object shapes that may be extended
 - Avoid `any` types - use proper typing
 - Enable all strict compiler options (noUnusedLocals, noUnusedParameters, etc.)
 
@@ -104,5 +104,5 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 
 - The application is designed for iPad and mobile web
 - UI text is in Danish
-- The project uses HugeIcons for category icons
+- The project uses HugeIcons for category icons (categories: mainPlot, subPlot, character, visual, quote, meta)
 - Focus on maintaining responsive design across all screen sizes
