@@ -447,6 +447,7 @@ const toggleSquare = (index: number) => {
 };
 
 const performResetMarks = async () => {
+  // If a reset is already in progress, cancel it and start a new one
   if (isResetting) {
     clearResetTimeouts();
   }
