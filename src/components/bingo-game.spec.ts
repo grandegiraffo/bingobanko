@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BingoGame from './bingo-game.vue'
 
@@ -152,5 +152,115 @@ describe('BingoGame', () => {
     // Game should remain xmas-tv-tropes
     expect(window.location.search.startsWith('?g=xmas-tv-tropes&r=')).toBe(true)
     expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
+  })
+
+  it('should start with animating pile and then animate to grid', async () => {
+    vi.useFakeTimers()
+    
+    const wrapper = mount(BingoGame)
+    await wrapper.vm.$nextTick()
+    
+    // Initially, the grid should have the animating class (pile state)
+    const grid = wrapper.find('.bingo-grid')
+    expect(grid.exists()).toBe(true)
+    expect(grid.classes()).toContain('animating')
+    
+    // Fast-forward past the animation duration (667ms on mount)
+    await vi.advanceTimersByTimeAsync(700)
+    await wrapper.vm.$nextTick()
+    
+    // After the animation completes, the animating class should be removed
+    expect(grid.classes()).not.toContain('animating')
+    
+    vi.useRealTimers()
+  })
+
+  it('should show animating pile when shuffling', async () => {
+    vi.useFakeTimers()
+    
+    const wrapper = mount(BingoGame)
+    
+    // Wait for initial animation to complete
+    await vi.advanceTimersByTimeAsync(700)
+    await wrapper.vm.$nextTick()
+    
+    const grid = wrapper.find('.bingo-grid')
+    expect(grid.classes()).not.toContain('animating')
+    
+    // Click shuffle button
+    const shuffleButton = wrapper.find('.shuffle-button')
+    await shuffleButton.trigger('click')
+    await wrapper.vm.$nextTick()
+    
+    // Confirm the shuffle
+    const confirmButton = wrapper.find('.confirm-accept')
+    await confirmButton.trigger('click')
+    await wrapper.vm.$nextTick()
+    
+    // Grid should be animating again after shuffle
+    expect(grid.classes()).toContain('animating')
+    
+    // Fast-forward past the animation duration (333ms on shuffle)
+    await vi.advanceTimersByTimeAsync(400)
+    await wrapper.vm.$nextTick()
+    
+    // Animation should be complete
+    expect(grid.classes()).not.toContain('animating')
+    
+    vi.useRealTimers()
+  })
+
+  it('should cascade mark and unmark all squares when resetting', async () => {
+    vi.useFakeTimers()
+    
+    const wrapper = mount(BingoGame)
+    
+    // Wait for initial animation to complete
+    await vi.advanceTimersByTimeAsync(700)
+    await wrapper.vm.$nextTick()
+    
+    // Mark some squares first
+    const squares = wrapper.findAll('.bingo-square')
+    await squares[0].trigger('click')
+    await squares[2].trigger('click')
+    await squares[4].trigger('click')
+    await wrapper.vm.$nextTick()
+    
+    // Verify squares are marked
+    expect(squares[0].classes()).toContain('marked')
+    expect(squares[2].classes()).toContain('marked')
+    expect(squares[4].classes()).toContain('marked')
+    
+    // Click reset button
+    const resetButton = wrapper.find('.reset-button')
+    await resetButton.trigger('click')
+    await wrapper.vm.$nextTick()
+    
+    // Confirm the reset
+    const confirmButton = wrapper.find('.confirm-accept')
+    await confirmButton.trigger('click')
+    await wrapper.vm.$nextTick()
+    
+    // Advance through the cascade mark animation (15 squares * 23ms each)
+    await vi.advanceTimersByTimeAsync(15 * 23)
+    await wrapper.vm.$nextTick()
+    
+    // All squares should be marked during cascade
+    const allMarked = wrapper.findAll('.bingo-square').every(sq => sq.classes().includes('marked'))
+    expect(allMarked).toBe(true)
+    
+    // Advance through the pause (3x cascade delay)
+    await vi.advanceTimersByTimeAsync(23 * 3)
+    await wrapper.vm.$nextTick()
+    
+    // Advance through the cascade unmark animation
+    await vi.advanceTimersByTimeAsync(15 * 23)
+    await wrapper.vm.$nextTick()
+    
+    // All squares should be unmarked after reset completes
+    const allUnmarked = wrapper.findAll('.bingo-square').every(sq => !sq.classes().includes('marked'))
+    expect(allUnmarked).toBe(true)
+    
+    vi.useRealTimers()
   })
 })
