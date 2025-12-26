@@ -356,8 +356,17 @@ const bingoSquares = ref<BingoSquare[]>(
 
 const isAnimating = ref(false);
 let animationTimer: number | null = null;
+let animationFrameId: number | null = null;
+let resetTimeouts: number[] = [];
+let isResetting = false;
 
 const clearAnimationTimer = () => {
+  if (animationFrameId !== null) {
+    if (typeof window !== "undefined") {
+      window.cancelAnimationFrame(animationFrameId);
+    }
+    animationFrameId = null;
+  }
   if (animationTimer !== null) {
     if (typeof window !== "undefined") {
       window.clearTimeout(animationTimer);
@@ -368,13 +377,25 @@ const clearAnimationTimer = () => {
   }
 };
 
+const clearResetTimeouts = () => {
+  resetTimeouts.forEach((timeoutId) => {
+    if (typeof window !== "undefined") {
+      window.clearTimeout(timeoutId);
+    } else {
+      clearTimeout(timeoutId);
+    }
+  });
+  resetTimeouts = [];
+};
+
 const triggerAnimation = () => {
   clearAnimationTimer();
   isAnimating.value = true;
   // Allow the pile state to render, then animate to grid after a short delay
   if (typeof window !== "undefined") {
     // Use requestAnimationFrame to ensure the pile state is painted first
-    requestAnimationFrame(() => {
+    animationFrameId = requestAnimationFrame(() => {
+      animationFrameId = null;
       animationTimer = window.setTimeout(() => {
         isAnimating.value = false;
         animationTimer = null;
@@ -426,7 +447,26 @@ const toggleSquare = (index: number) => {
 };
 
 const performResetMarks = async () => {
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  if (isResetting) {
+    clearResetTimeouts();
+  }
+  isResetting = true;
+  
+  const delay = (ms: number) =>
+    new Promise<void>((resolve) => {
+      const timeoutId =
+        typeof window !== "undefined"
+          ? window.setTimeout(() => {
+              resetTimeouts = resetTimeouts.filter((id) => id !== timeoutId);
+              resolve();
+            }, ms)
+          : (setTimeout(() => {
+              resetTimeouts = resetTimeouts.filter((id) => id !== timeoutId);
+              resolve();
+            }, ms) as unknown as number);
+      resetTimeouts.push(timeoutId);
+    });
+  
   const cascadeDelay = 23; // milliseconds between each square
 
   // Cascade mark all squares
@@ -443,6 +483,8 @@ const performResetMarks = async () => {
     square.marked = false;
     await delay(cascadeDelay);
   }
+  
+  isResetting = false;
 };
 
 const performShuffle = () => {
@@ -514,14 +556,14 @@ const cancelConfirm = () => {
   pendingAction.value = null;
 };
 
-const acceptConfirm = () => {
+const acceptConfirm = async () => {
   if (pendingAction.value === "shuffle") {
     scrollToTopOfWindow();
     performShuffle();
     triggerAnimation();
   } else if (pendingAction.value === "reset") {
     scrollToTopOfWindow();
-    performResetMarks();
+    await performResetMarks();
   } else if (pendingAction.value === "changeGame" && pendingGameId.value !== null) {
     selectedGameId.value = pendingGameId.value;
     pendingGameId.value = null;
@@ -612,6 +654,7 @@ const copyShareLink = async () => {
 onUnmounted(() => {
   clearShareTimer();
   clearAnimationTimer();
+  clearResetTimeouts();
 });
 </script>
 

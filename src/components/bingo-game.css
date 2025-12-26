@@ -140,11 +140,15 @@
 }
 
 /* Animation: pile in center state */
+.bingo-grid.animating {
+  position: relative;
+}
+
 .bingo-grid.animating .bingo-square {
-  position: fixed;
-  top: 50%;
+  position: absolute;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(var(--pile-rotation, 0deg)) scale(0.6);
+  transform: translateX(-50%) rotate(var(--pile-rotation, 0deg)) scale(0.6);
   z-index: 100;
   opacity: 0.9;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
