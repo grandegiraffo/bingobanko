@@ -100,7 +100,23 @@
         </div>
       </div>
       <div class="credits">
-        Efter idé af 🤎🐻
+        <a
+          href="https://github.com/hjepsen"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Konceptidé af 🤎🐻</a> ⸺ <a
+          href="https://github.com/grandegiraffo/bingobanko"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Åben sovs <img
+          class="emoji"
+          title=":octocat:"
+          alt=":octocat:"
+          src="https://github.githubassets.com/images/icons/emoji/octocat.png"
+          height="20"
+          width="20"
+        >🦒
+        </a>
       </div>
     </footer>
     <div
