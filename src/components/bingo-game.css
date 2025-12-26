@@ -119,6 +119,7 @@
   gap: 15px;
   flex: 1;
   margin-bottom: 30px;
+  position: relative;
 }
 
 .bingo-square {
@@ -126,7 +127,10 @@
   border-radius: 12px;
   padding: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.6s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
   min-height: 140px;
@@ -135,9 +139,51 @@
   justify-content: center;
 }
 
+/* Animation: pile in center state */
+.bingo-grid.animating {
+  position: relative;
+}
+
+.bingo-grid.animating .bingo-square {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(var(--pile-rotation, 0deg)) scale(0.6);
+  z-index: 100;
+  opacity: 0.9;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Stagger pile rotation for visual interest */
+.bingo-grid.animating .bingo-square:nth-child(1) { --pile-rotation: -12deg; }
+.bingo-grid.animating .bingo-square:nth-child(2) { --pile-rotation: 8deg; }
+.bingo-grid.animating .bingo-square:nth-child(3) { --pile-rotation: -5deg; }
+.bingo-grid.animating .bingo-square:nth-child(4) { --pile-rotation: 15deg; }
+.bingo-grid.animating .bingo-square:nth-child(5) { --pile-rotation: -18deg; }
+.bingo-grid.animating .bingo-square:nth-child(6) { --pile-rotation: 3deg; }
+.bingo-grid.animating .bingo-square:nth-child(7) { --pile-rotation: -10deg; }
+.bingo-grid.animating .bingo-square:nth-child(8) { --pile-rotation: 20deg; }
+.bingo-grid.animating .bingo-square:nth-child(9) { --pile-rotation: -7deg; }
+.bingo-grid.animating .bingo-square:nth-child(10) { --pile-rotation: 12deg; }
+.bingo-grid.animating .bingo-square:nth-child(11) { --pile-rotation: -15deg; }
+.bingo-grid.animating .bingo-square:nth-child(12) { --pile-rotation: 6deg; }
+.bingo-grid.animating .bingo-square:nth-child(13) { --pile-rotation: -3deg; }
+.bingo-grid.animating .bingo-square:nth-child(14) { --pile-rotation: 18deg; }
+.bingo-grid.animating .bingo-square:nth-child(15) { --pile-rotation: -20deg; }
+
+/* Stagger z-index for depth */
+.bingo-grid.animating .bingo-square:nth-child(odd) { z-index: 101; }
+.bingo-grid.animating .bingo-square:nth-child(3n) { z-index: 102; }
+.bingo-grid.animating .bingo-square:nth-child(5n) { z-index: 103; }
+
 .bingo-square:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Disable hover transform during animation */
+.bingo-grid.animating .bingo-square:hover {
+  transform: translate(-50%, -50%) rotate(var(--pile-rotation, 0deg)) scale(0.6);
 }
 
 .bingo-square.marked {

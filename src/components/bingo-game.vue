@@ -18,7 +18,10 @@
       </div>
     </header>
 
-    <div class="bingo-grid">
+    <div
+      class="bingo-grid"
+      :class="{ animating: isAnimating }"
+    >
       <div
         v-for="(square, index) in bingoSquares"
         :key="index"
@@ -151,7 +154,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { BingoSquare } from "@/types/bingo-square";
 import type { BingoGameDataModule } from "@/types/bingo-game-module";
-import { computed, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 type ConfirmableAction = "shuffle" | "reset" | "changeGame";
 
@@ -351,6 +354,74 @@ const bingoSquares = ref<BingoSquare[]>(
   createSquares(selectedGame.value, currentOrder.value)
 );
 
+const isAnimating = ref(false);
+let animationTimer: number | null = null;
+let animationFrameId: number | null = null;
+let resetTimeouts: number[] = [];
+let isResetting = false;
+
+const clearAnimationTimer = () => {
+  if (animationFrameId !== null) {
+    if (typeof window !== "undefined") {
+      window.cancelAnimationFrame(animationFrameId);
+    }
+    animationFrameId = null;
+  }
+  if (animationTimer !== null) {
+    if (typeof window !== "undefined") {
+      window.clearTimeout(animationTimer);
+    } else {
+      clearTimeout(animationTimer);
+    }
+    animationTimer = null;
+  }
+};
+
+const clearResetTimeouts = () => {
+  resetTimeouts.forEach((timeoutId) => {
+    if (typeof window !== "undefined") {
+      window.clearTimeout(timeoutId);
+    } else {
+      clearTimeout(timeoutId);
+    }
+  });
+  resetTimeouts = [];
+};
+
+const triggerAnimation = () => {
+  clearAnimationTimer();
+  isAnimating.value = true;
+  // Allow the pile state to render, then animate to grid after a short delay
+  if (typeof window !== "undefined") {
+    // Use requestAnimationFrame to ensure the pile state is painted first
+    animationFrameId = requestAnimationFrame(() => {
+      animationFrameId = null;
+      animationTimer = window.setTimeout(() => {
+        isAnimating.value = false;
+        animationTimer = null;
+      }, 333);
+    });
+  }
+};
+
+onMounted(() => {
+  // Start with tiles in pile state
+  isAnimating.value = true;
+  // Animate to grid after 667 milliseconds
+  if (typeof window !== "undefined") {
+    animationTimer = window.setTimeout(() => {
+      isAnimating.value = false;
+      animationTimer = null;
+    }, 667);
+  }
+});
+
+const scrollToTopOfWindow = () => {
+  if (typeof window !== "undefined") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
+
 const rebuildSquares = (order: string[]) => {
   const game = selectedGame.value;
   if (!game) {
@@ -375,8 +446,46 @@ const toggleSquare = (index: number) => {
   square.marked = !square.marked;
 };
 
-const performReset = () => {
-  rebuildSquares(currentOrder.value);
+const performResetMarks = async () => {
+  // If a reset is already in progress, cancel it and start a new one
+  if (isResetting) {
+    clearResetTimeouts();
+  }
+  isResetting = true;
+  
+  const delay = (ms: number) =>
+    new Promise<void>((resolve) => {
+      const timeoutId =
+        typeof window !== "undefined"
+          ? window.setTimeout(() => {
+              resetTimeouts = resetTimeouts.filter((id) => id !== timeoutId);
+              resolve();
+            }, ms)
+          : (setTimeout(() => {
+              resetTimeouts = resetTimeouts.filter((id) => id !== timeoutId);
+              resolve();
+            }, ms) as unknown as number);
+      resetTimeouts.push(timeoutId);
+    });
+  
+  const cascadeDelay = 23; // milliseconds between each square
+
+  // Cascade mark all squares
+  for (const square of bingoSquares.value) {
+    square.marked = true;
+    await delay(cascadeDelay);
+  }
+
+  // Brief 3x pause before unmarking
+  await delay(cascadeDelay * 3);
+
+  // Cascade unmark all squares
+  for (const square of bingoSquares.value) {
+    square.marked = false;
+    await delay(cascadeDelay);
+  }
+  
+  isResetting = false;
 };
 
 const performShuffle = () => {
@@ -448,17 +557,19 @@ const cancelConfirm = () => {
   pendingAction.value = null;
 };
 
-const acceptConfirm = () => {
+const acceptConfirm = async () => {
   if (pendingAction.value === "shuffle") {
+    scrollToTopOfWindow();
     performShuffle();
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    triggerAnimation();
   } else if (pendingAction.value === "reset") {
-    performReset();
+    scrollToTopOfWindow();
+    await performResetMarks();
   } else if (pendingAction.value === "changeGame" && pendingGameId.value !== null) {
     selectedGameId.value = pendingGameId.value;
     pendingGameId.value = null;
+    scrollToTopOfWindow();
+    triggerAnimation();
   }
   pendingAction.value = null;
 };
@@ -543,6 +654,8 @@ const copyShareLink = async () => {
 
 onUnmounted(() => {
   clearShareTimer();
+  clearAnimationTimer();
+  clearResetTimeouts();
 });
 </script>
 
