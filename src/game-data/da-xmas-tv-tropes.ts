@@ -4,12 +4,12 @@ import type { BingoSquare } from "@/types/bingo-square";
 /**
  * Unique identifier for the Bingo Game
  */
-const GameId = "xmas-tv-tropes";
+const GameId = "da-xmas-tv-tropes";
 
 /**
  * Name of the Bingo Game
  */
-const GameName = "🎄 Hallmark Julefilm Bingo 🎄";
+const GameName = "🇩🇰🎄 Hallmark Julefilm 🎄🇩🇰";
 
 /**
  * Xmas Romance Movie Tropes Bingo Squares

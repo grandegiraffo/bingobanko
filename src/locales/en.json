@@ -1,0 +1,52 @@
+{
+  "game": {
+    "unknownGame": "Unknown game",
+    "subtitle": "Click the squares when you spot the scenes",
+    "score": {
+      "label": "Score"
+    }
+  },
+  "buttons": {
+    "copyLink": "🔗 Share link",
+    "copied": "📋 Copied",
+    "error": "⚠️ Error",
+    "shuffle": "🔀 Shuffle tiles",
+    "reset": "🔄 Reset marks"
+  },
+  "gameSelect": {
+    "label": "Select game"
+  },
+  "confirm": {
+    "shuffle": {
+      "title": "Shuffle tiles?",
+      "message": "This creates a new board with a new shareable link. Marked tiles will be reset.",
+      "confirmLabel": "Yes, shuffle",
+      "cancelLabel": "Cancel"
+    },
+    "reset": {
+      "title": "Reset marks?",
+      "message": "All marks will be removed, but the tile order stays the same.",
+      "confirmLabel": "Reset",
+      "cancelLabel": "Keep"
+    },
+    "changeGame": {
+      "title": "Change game?",
+      "message": "This will start a new game. Marked tiles will be reset.",
+      "confirmLabel": "Change game",
+      "cancelLabel": "Cancel"
+    },
+    "default": {
+      "title": "",
+      "message": "",
+      "confirmLabel": "OK",
+      "cancelLabel": "Cancel"
+    }
+  },
+  "credits": {
+    "conceptBy": "Concept idea by",
+    "openSource": "Open sauce"
+  },
+  "errors": {
+    "copyFailed": "⚠️ Something went wrong. The system couldn't copy the link. ⚠️"
+  }
+}

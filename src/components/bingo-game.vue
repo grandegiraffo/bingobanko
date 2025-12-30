@@ -1,14 +1,14 @@
 <template>
   <div class="bingo-container">
     <header class="bingo-header">
-      <h1>{{ selectedGame?.name || 'Ukendt spil' }}</h1>
+      <h1>{{ selectedGame?.name || t('game.unknownGame') }}</h1>
       
       <div class="subtitle">
-        Klik på felterne, når du ser scenerne
+        {{ t('game.subtitle') }}
       </div>
       <div class="scoreboard">
         <div class="score-label">
-          Point
+          {{ t('game.score.label') }}
         </div>
         <div class="score-value">
           <span class="score-current">{{ markedCount }}</span>
@@ -68,20 +68,20 @@
           class="shuffle-button"
           @click="requestConfirm('shuffle')"
         >
-          🔀 Bland felter
+          {{ t('buttons.shuffle') }}
         </button>
         <button
           class="reset-button"
           @click="requestConfirm('reset')"
         >
-          🔄 Nulstil krydser
+          {{ t('buttons.reset') }}
         </button>
         <div class="game-select">
           <label
             class="game-select-label"
             for="game-select"
           >
-            Vælg spil
+            {{ t('gameSelect.label') }}
           </label>
           <select
             id="game-select"
@@ -104,11 +104,11 @@
           href="https://github.com/hjepsen"
           target="_blank"
           rel="noopener noreferrer"
-        >Konceptidé af 🤎🐻</a> ⸺ <a
+        >{{ t('credits.conceptBy') }} 🤎🐻</a> ⸺ <a
           href="https://github.com/grandegiraffo/bingobanko"
           target="_blank"
           rel="noopener noreferrer"
-        >Åben sovs <img
+        >{{ t('credits.openSource') }} <img
           class="emoji"
           title=":octocat:"
           alt=":octocat:"
@@ -171,6 +171,10 @@ import {
 import { BingoSquare } from "@/types/bingo-square";
 import type { BingoGameDataModule } from "@/types/bingo-game-module";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { setLocale } from "@/i18n";
+
+const { t } = useI18n();
 
 type ConfirmableAction = "shuffle" | "reset" | "changeGame";
 
@@ -365,6 +369,25 @@ const getCategoryIcon = (category: BingoSquare["category"]) =>
 const selectedGameId = ref<GameId>(resolveInitialGameId());
 const selectedGame = computed(() => gamesById[selectedGameId.value]);
 
+const extractLocaleFromGameId = (gameId: string): 'da' | 'en' | null => {
+  const prefix = gameId.split('-')[0];
+  if (prefix === 'da' || prefix === 'en') {
+    return prefix;
+  }
+  return null;
+};
+
+// Sync i18n locale with the game's language prefix
+const syncLocaleWithGame = (gameId: string) => {
+  const locale = extractLocaleFromGameId(gameId);
+  if (locale) {
+    setLocale(locale);
+  }
+};
+
+// Set initial locale based on the initial game
+syncLocaleWithGame(selectedGameId.value);
+
 const currentOrder = ref<string[]>(resolveInitialOrder(selectedGameId.value));
 const bingoSquares = ref<BingoSquare[]>(
   createSquares(selectedGame.value, currentOrder.value)
@@ -518,6 +541,7 @@ watch(selectedGameId, (newGameId, oldGameId) => {
   if (newGameId === oldGameId) return;
   const game = gamesById[newGameId];
   if (!game) return;
+  syncLocaleWithGame(newGameId);
   const order = shuffleOrder(game);
   persistGameAndOrder(newGameId, order);
   setNewOrder(order);
@@ -528,35 +552,34 @@ const pendingAction = ref<ConfirmableAction | null>(null);
 const confirmCopy = computed(() => {
   if (pendingAction.value === "shuffle") {
     return {
-      title: "Blande felterne?",
-      message:
-        "Det giver et helt nyt bræt og et nyt delbart link. Markerede felter bliver nulstillet.",
-      confirmLabel: "Ja, bland",
-      cancelLabel: "Fortryd",
-    } as const;
+      title: t('confirm.shuffle.title'),
+      message: t('confirm.shuffle.message'),
+      confirmLabel: t('confirm.shuffle.confirmLabel'),
+      cancelLabel: t('confirm.shuffle.cancelLabel'),
+    };
   }
   if (pendingAction.value === "reset") {
     return {
-      title: "Nulstil krydser?",
-      message: "Alle markeringer fjernes, men rækkefølgen forbliver den samme.",
-      confirmLabel: "Nulstil",
-      cancelLabel: "Behold",
-    } as const;
+      title: t('confirm.reset.title'),
+      message: t('confirm.reset.message'),
+      confirmLabel: t('confirm.reset.confirmLabel'),
+      cancelLabel: t('confirm.reset.cancelLabel'),
+    };
   }
   if (pendingAction.value === "changeGame") {
     return {
-      title: "Skift spil?",
-      message: "Dette vil starte et nyt spil. Markerede felter bliver nulstillet.",
-      confirmLabel: "Skift spil",
-      cancelLabel: "Fortryd",
-    } as const;
+      title: t('confirm.changeGame.title'),
+      message: t('confirm.changeGame.message'),
+      confirmLabel: t('confirm.changeGame.confirmLabel'),
+      cancelLabel: t('confirm.changeGame.cancelLabel'),
+    };
   }
   return {
-    title: "",
-    message: "",
-    confirmLabel: "OK",
-    cancelLabel: "Annuller",
-  } as const;
+    title: t('confirm.default.title'),
+    message: t('confirm.default.message'),
+    confirmLabel: t('confirm.default.confirmLabel'),
+    cancelLabel: t('confirm.default.cancelLabel'),
+  };
 });
 
 const isConfirmOpen = computed(() => pendingAction.value !== null);
@@ -609,9 +632,9 @@ const shareNotice = ref<string>("");
 let shareResetTimer: number | null = null;
 
 const shareButtonLabel = computed(() => {
-  if (shareStatus.value === "copied") return "📋 Kopieret";
-  if (shareStatus.value === "error") return "⚠️ Fejl";
-  return "🔗 Del link";
+  if (shareStatus.value === "copied") return t('buttons.copied');
+  if (shareStatus.value === "error") return t('buttons.error');
+  return t('buttons.copyLink');
 });
 
 const clearShareTimer = () => {
@@ -663,7 +686,7 @@ const copyShareLink = async () => {
   } catch {
     setShareFeedback(
       "error",
-      "⚠️ Noget gik galt. Systemet kunne ikke kopiere link. ⚠️"
+      t('errors.copyFailed')
     );
   }
 };
