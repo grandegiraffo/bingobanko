@@ -156,7 +156,7 @@ describe('BingoGame', () => {
     await cancelButton.trigger('click')
     await wrapper.vm.$nextTick()
 
-    // Game should remain en-xmas-tv-tropes
+    // Game should remain da-nordicnoir-tv-tropes
     expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
     expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
   })
