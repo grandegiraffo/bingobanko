@@ -172,6 +172,7 @@ import { BingoSquare } from "@/types/bingo-square";
 import type { BingoGameDataModule } from "@/types/bingo-game-module";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { setLocale } from "@/i18n";
 
 const { t } = useI18n();
 
@@ -368,6 +369,25 @@ const getCategoryIcon = (category: BingoSquare["category"]) =>
 const selectedGameId = ref<GameId>(resolveInitialGameId());
 const selectedGame = computed(() => gamesById[selectedGameId.value]);
 
+const extractLocaleFromGameId = (gameId: string): 'da' | 'en' | null => {
+  const prefix = gameId.split('-')[0];
+  if (prefix === 'da' || prefix === 'en') {
+    return prefix;
+  }
+  return null;
+};
+
+// Sync i18n locale with the game's language prefix
+const syncLocaleWithGame = (gameId: string) => {
+  const locale = extractLocaleFromGameId(gameId);
+  if (locale) {
+    setLocale(locale);
+  }
+};
+
+// Set initial locale based on the initial game
+syncLocaleWithGame(selectedGameId.value);
+
 const currentOrder = ref<string[]>(resolveInitialOrder(selectedGameId.value));
 const bingoSquares = ref<BingoSquare[]>(
   createSquares(selectedGame.value, currentOrder.value)
@@ -521,6 +541,7 @@ watch(selectedGameId, (newGameId, oldGameId) => {
   if (newGameId === oldGameId) return;
   const game = gamesById[newGameId];
   if (!game) return;
+  syncLocaleWithGame(newGameId);
   const order = shuffleOrder(game);
   persistGameAndOrder(newGameId, order);
   setNewOrder(order);
