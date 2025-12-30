@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BingoGame from './bingo-game.vue'
+import { i18n } from '@/i18n'
 
 describe('BingoGame', () => {
   beforeEach(() => {
@@ -10,26 +11,32 @@ describe('BingoGame', () => {
     }
   })
 
-  it('should default to xmas and persist g before r in the URL', async () => {
-    const wrapper = mount(BingoGame)
+  const mountWithI18n = () => mount(BingoGame, {
+    global: {
+      plugins: [i18n]
+    }
+  })
+
+  it('should default to danish version of nordic noir and persist g before r in the URL', async () => {
+    const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
 
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
-    expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
+    expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
 
-    expect(window.location.search.startsWith('?g=xmas-tv-tropes&r=')).toBe(true)
+    expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
   })
 
   it('should switch games via dropdown and update the URL g parameter', async () => {
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
 
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
 
     // Change the game selection
-    await select.setValue('nordicnoir-tv-tropes')
+    await select.setValue('en-nordicnoir-tv-tropes')
     await wrapper.vm.$nextTick()
 
     // Confirm dialog should appear
@@ -39,14 +46,14 @@ describe('BingoGame', () => {
     await wrapper.vm.$nextTick()
 
     // After confirmation, the URL should be updated
-    expect(window.location.search.startsWith('?g=nordicnoir-tv-tropes&r=')).toBe(true)
+    expect(window.location.search.startsWith('?g=en-nordicnoir-tv-tropes&r=')).toBe(true)
 
     const squares = wrapper.findAll('.bingo-square')
     expect(squares.length).toBe(15)
   })
 
   it('should toggle square marked state when clicked', async () => {
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
 
     // Wait for component to be fully mounted
     await wrapper.vm.$nextTick()
@@ -72,7 +79,7 @@ describe('BingoGame', () => {
   })
 
   it('should render exactly 15 bingo squares', async () => {
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
 
     // Wait for component to be fully mounted
     await wrapper.vm.$nextTick()
@@ -93,7 +100,7 @@ describe('BingoGame', () => {
   })
 
   it('should create different board orders when shuffled', async () => {
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
 
     // Get initial square titles
@@ -126,17 +133,17 @@ describe('BingoGame', () => {
   })
 
   it('should show confirmation dialog when changing game and keep current game on cancel', async () => {
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
 
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
 
-    // Initially should be xmas-tv-tropes
-    expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
+    // Initially should be da-nordicnoir-tv-tropes
+    expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
 
     // Try to change the game
-    await select.setValue('nordicnoir-tv-tropes')
+    await select.setValue('en-xmas-tv-tropes')
     await wrapper.vm.$nextTick()
 
     // Confirm dialog should appear
@@ -149,15 +156,15 @@ describe('BingoGame', () => {
     await cancelButton.trigger('click')
     await wrapper.vm.$nextTick()
 
-    // Game should remain xmas-tv-tropes
-    expect(window.location.search.startsWith('?g=xmas-tv-tropes&r=')).toBe(true)
-    expect((select.element as HTMLSelectElement).value).toBe('xmas-tv-tropes')
+    // Game should remain en-xmas-tv-tropes
+    expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
+    expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
   })
 
   it('should start with animating pile and then animate to grid', async () => {
     vi.useFakeTimers()
     
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
     
     // Initially, the grid should have the animating class (pile state)
@@ -178,7 +185,7 @@ describe('BingoGame', () => {
   it('should show animating pile when shuffling', async () => {
     vi.useFakeTimers()
     
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
     
     // Wait for initial animation to complete
     await vi.advanceTimersByTimeAsync(700)
@@ -213,7 +220,7 @@ describe('BingoGame', () => {
   it('should cascade mark and unmark all squares when resetting', async () => {
     vi.useFakeTimers()
     
-    const wrapper = mount(BingoGame)
+    const wrapper = mountWithI18n()
     
     // Wait for initial animation to complete
     await vi.advanceTimersByTimeAsync(700)

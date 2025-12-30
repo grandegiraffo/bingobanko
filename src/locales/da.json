@@ -1,0 +1,52 @@
+{
+  "game": {
+    "unknownGame": "Ukendt spil",
+    "subtitle": "Klik på felterne, når du ser scenerne",
+    "score": {
+      "label": "Point"
+    }
+  },
+  "buttons": {
+    "copyLink": "🔗 Del link",
+    "copied": "📋 Kopieret",
+    "error": "⚠️ Fejl",
+    "shuffle": "🔀 Bland felter",
+    "reset": "🔄 Nulstil krydser"
+  },
+  "gameSelect": {
+    "label": "Vælg spil"
+  },
+  "confirm": {
+    "shuffle": {
+      "title": "Blande felterne?",
+      "message": "Det giver et helt nyt bræt og et nyt delbart link. Markerede felter bliver nulstillet.",
+      "confirmLabel": "Ja, bland",
+      "cancelLabel": "Fortryd"
+    },
+    "reset": {
+      "title": "Nulstil krydser?",
+      "message": "Alle markeringer fjernes, men rækkefølgen forbliver den samme.",
+      "confirmLabel": "Nulstil",
+      "cancelLabel": "Behold"
+    },
+    "changeGame": {
+      "title": "Skift spil?",
+      "message": "Dette vil starte et nyt spil. Markerede felter bliver nulstillet.",
+      "confirmLabel": "Skift spil",
+      "cancelLabel": "Fortryd"
+    },
+    "default": {
+      "title": "",
+      "message": "",
+      "confirmLabel": "OK",
+      "cancelLabel": "Annuller"
+    }
+  },
+  "credits": {
+    "conceptBy": "Konceptidé af",
+    "openSource": "Åben sovs"
+  },
+  "errors": {
+    "copyFailed": "⚠️ Noget gik galt. Systemet kunne ikke kopiere link. ⚠️"
+  }
+}

@@ -4,12 +4,12 @@ import type { BingoSquare } from "@/types/bingo-square";
 /**
  * Unique identifier for the Bingo Game
  */
-const GameId = "nordicnoir-tv-tropes";
+const GameId = "da-nordicnoir-tv-tropes";
 
 /**
  * Name of the Bingo Game
  */
-const GameName = "🌧️ Nordisk Noir Bingo ❄️";
+const GameName = "🇩🇰🌧️ Nordisk Noir Krimi ❄️🇩🇰";
 
 /**
  * Nordic Noir TV Tropes Bingo Squares.
