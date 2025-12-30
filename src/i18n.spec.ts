@@ -120,13 +120,16 @@ describe('i18n', () => {
 
   describe('i18n instance', () => {
     it('should have fallback locale set to "da"', () => {
-      // @ts-expect-error - fallbackLocale may have different typing
-      expect(i18n.global.fallbackLocale.value || i18n.global.fallbackLocale).toBe('da')
+      // Access fallbackLocale - it's a ComputedRef in composition mode
+      // @ts-expect-error - fallbackLocale typing is complex
+      expect(i18n.global.fallbackLocale.value).toBe('da')
     })
 
     it('should have messages for both "da" and "en" locales', () => {
-      // @ts-expect-error - messages may have different typing
-      const messages = i18n.global.messages.value || i18n.global.messages
+      // Access messages - it's a ComputedRef in composition mode
+      // @ts-expect-error - messages typing is complex
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const messages = i18n.global.messages.value
       expect(messages).toHaveProperty('da')
       expect(messages).toHaveProperty('en')
     })
