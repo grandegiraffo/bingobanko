@@ -16,7 +16,7 @@ const GameName = "🇬🇧🎄 Hallmark Christmas Movie Bingo 🎄🇬🇧";
  * These tropes are commonly found in Christmas romance movies.
  * Each trope has a unique ID, title, description, and category.
  *
- * IDs were generated using https://shortunique.id/\#md:use-in-cli
+ * IDs were generated using https://shortunique.id/#md:use-in-cli
  *  npm install --global short-unique-id
  *  for i in {1..15}; do suid -l 10; done
  * Array of bingo squares without the 'marked' property.
