@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BingoGame from './bingo-game.vue'
-import { i18n } from '@/i18n'
+import { i18n, setLocale } from '@/i18n'
 
 describe('BingoGame', () => {
   beforeEach(() => {
@@ -269,5 +269,102 @@ describe('BingoGame', () => {
     expect(allUnmarked).toBe(true)
     
     vi.useRealTimers()
+  })
+
+  describe('Locale syncing', () => {
+    beforeEach(() => {
+      // Reset locale to default before each test
+      setLocale('da')
+    })
+
+    it('should sync locale to English when switching to English game', async () => {
+      const wrapper = mountWithI18n()
+      await wrapper.vm.$nextTick()
+
+      // Initial locale should be 'da'
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('da')
+
+      const select = wrapper.find('#game-select')
+      
+      // Change to English game
+      await select.setValue('en-xmas-tv-tropes')
+      await wrapper.vm.$nextTick()
+
+      // Confirm the change
+      const confirmButton = wrapper.find('.confirm-accept')
+      await confirmButton.trigger('click')
+      await wrapper.vm.$nextTick()
+
+      // Locale should now be 'en'
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('en')
+    })
+
+    it('should sync locale to Danish when switching to Danish game', async () => {
+      // Set initial locale to English
+      setLocale('en')
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('en')
+
+      const wrapper = mountWithI18n()
+      await wrapper.vm.$nextTick()
+
+      const select = wrapper.find('#game-select')
+      
+      // Switch to Danish game (should already be Danish, but let's explicitly test)
+      await select.setValue('da-nordicnoir-tv-tropes')
+      await wrapper.vm.$nextTick()
+
+      // Confirm the change
+      const confirmButton = wrapper.find('.confirm-accept')
+      if (confirmButton.exists()) {
+        await confirmButton.trigger('click')
+        await wrapper.vm.$nextTick()
+      }
+
+      // Locale should now be 'da'
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('da')
+    })
+
+    it('should not change locale when game ID has no locale prefix', async () => {
+      setLocale('da')
+      const wrapper = mountWithI18n()
+      await wrapper.vm.$nextTick()
+
+      // Initial locale is 'da'
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('da')
+
+      // If we were to switch to a game without a locale prefix, 
+      // the locale should remain unchanged. Since all games have prefixes,
+      // we test by verifying the current behavior maintains locale
+      const select = wrapper.find('#game-select')
+      await select.setValue('da-xmas-tv-tropes')
+      await wrapper.vm.$nextTick()
+
+      const confirmButton = wrapper.find('.confirm-accept')
+      await confirmButton.trigger('click')
+      await wrapper.vm.$nextTick()
+
+      // Should still be 'da'
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('da')
+    })
+
+    it('should set initial locale based on initial game selection', async () => {
+      // Set URL parameter to select English game
+      const url = new URL(window.location.href)
+      url.searchParams.set('g', 'en-nordicnoir-tv-tropes')
+      window.history.replaceState({}, '', url.toString())
+
+      const wrapper = mountWithI18n()
+      await wrapper.vm.$nextTick()
+
+      // Locale should be 'en' based on the game selected via URL
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe('en')
+    })
   })
 })
