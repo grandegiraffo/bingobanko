@@ -3,17 +3,21 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
-  // Use the repository name when building for GitHub Pages so asset URLs resolve correctly.
-  base: mode === 'development' ? '/' : '/bingobanko/',
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+export default defineConfig(({ mode }) => {
+  const basePath = process.env.BASE_PATH ?? (mode === 'development' ? '/' : '/bingobanko/')
+
+  return {
+    // Default to GitHub Pages base; override with BASE_PATH for other hosts (e.g., Cloudflare Workers).
+    base: basePath,
+    plugins: [vue()],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    test: {
+      globals: true,
+      environment: 'happy-dom',
     }
-  },
-  test: {
-    globals: true,
-    environment: 'happy-dom',
   }
-}))
+})
