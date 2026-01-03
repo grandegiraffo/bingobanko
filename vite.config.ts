@@ -3,11 +3,10 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-  const basePath = process.env.BASE_PATH ?? (mode === 'development' ? '/' : '/bingobanko/')
+export default defineConfig(() => {
+  const basePath = process.env.BASE_PATH ?? '/'
 
   return {
-    // Default to GitHub Pages base; override with BASE_PATH for other hosts (e.g., Cloudflare Workers).
     base: basePath,
     plugins: [vue()],
     resolve: {

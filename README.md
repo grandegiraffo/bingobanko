@@ -24,8 +24,8 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 - **TypeScript** - Strongly typed JavaScript
 - **ESLint** - Code quality and consistency
 - **Prettier** - Code formatting
-- **GitHub Actions** - Automated builds and deployments
-- **GitHub Pages** - Hosting for the live app
+- **GitHub Actions** - Automated builds and tests
+- **Cloudflare Workers** - Edge hosting via Wrangler
 
 ## Getting Started
 
@@ -50,16 +50,17 @@ npm run dev
 
 ### Building for Production
 
-Build for production is automatically handled by GitHub Actions and Pages on merges to main branch.
-
 ```bash
 # To build locally, run
 npm run build
+
+# To build and deploy to Cloudflare Workers
+npm run deploy:worker
 ```
 
 ## Usage
 
-1. Open the [web app](https://grandegiraffo.github.io/bingobanko/) on your device
+1. Open your deployed URL (e.g., your Cloudflare Worker route) on your device
 2. Watch your favorite Hallmark Christmas, Nordic Noir, or other movie or TV show
 3. Click/tap on squares when the scenarios occur
 4. Try to mark as many squares as possible

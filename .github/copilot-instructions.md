@@ -13,7 +13,7 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 - **happy-dom** - Test environment
 - **ESLint** - Code linting with TypeScript and Vue plugins
 - **GitHub Actions** - CI/CD pipeline
-- **GitHub Pages** - Production hosting
+- **Cloudflare Workers** - Production hosting via Wrangler
 
 ## Development Commands
 
@@ -82,8 +82,7 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 
 ### Build Configuration
 
-- Base URL for production: `/bingobanko/` (GitHub Pages repository name)
-- Base URL for development: `/`
+- Base URL defaults to `/`; override with `BASE_PATH` if deploying under a subpath
 - Vite is configured with Vue plugin and path alias `@`
 
 ## Code Quality Requirements
@@ -97,7 +96,7 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 ## CI/CD Pipeline
 
 - Pull requests trigger CI workflow that runs: lint, build, and test with coverage
-- Merges to main trigger GitHub Pages deployment
+- Deploy to Cloudflare Workers with `npm run deploy:worker` (uses `wrangler.jsonc`)
 - Node.js version is specified in `.nvmrc` file (v24)
 
 ## Additional Notes
