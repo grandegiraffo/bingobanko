@@ -23,7 +23,11 @@ describe('BingoGame', () => {
 
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
-    expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
+    const selectElement = select.element
+    if (!(selectElement instanceof HTMLSelectElement)) {
+      throw new Error('Expected game select to be an HTMLSelectElement')
+    }
+    expect(selectElement.value).toBe('da-nordicnoir-tv-tropes')
 
     expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
   })
@@ -140,7 +144,11 @@ describe('BingoGame', () => {
     expect(select.exists()).toBe(true)
 
     // Initially should be da-nordicnoir-tv-tropes
-    expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
+    const initialSelectElement = select.element
+    if (!(initialSelectElement instanceof HTMLSelectElement)) {
+      throw new Error('Expected game select to be an HTMLSelectElement')
+    }
+    expect(initialSelectElement.value).toBe('da-nordicnoir-tv-tropes')
 
     // Try to change the game
     await select.setValue('en-xmas-tv-tropes')
@@ -158,7 +166,11 @@ describe('BingoGame', () => {
 
     // Game should remain da-nordicnoir-tv-tropes
     expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
-    expect((select.element as HTMLSelectElement).value).toBe('da-nordicnoir-tv-tropes')
+    const selectElement = select.element
+    if (!(selectElement instanceof HTMLSelectElement)) {
+      throw new Error('Expected game select to be an HTMLSelectElement')
+    }
+    expect(selectElement.value).toBe('da-nordicnoir-tv-tropes')
   })
 
   it('should start with animating pile and then animate to grid', async () => {

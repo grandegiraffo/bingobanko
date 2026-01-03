@@ -1,6 +1,7 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
+    "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "types": ["node"]

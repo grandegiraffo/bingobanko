@@ -1,0 +1,18 @@
+{
+  "name": "bingo",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-01-02",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "level": "info",
+      "head_sampling_rate": 100,
+      "invocation_logs": true,
+      "persist": true
+    }
+  }
+}
