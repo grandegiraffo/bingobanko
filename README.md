@@ -1,6 +1,6 @@
 # 🔢🔴 Bingo with movie and TV-tropes 🔴🔢
 
-A bingo game app built using Vue and TypeScript for iPad and mobile web featuring classic Hallmark Christmas, Nordic Noir and other movie scenarios and tropes in Danish.
+A bingo game app built using Vue and TypeScript for iPad and mobile web featuring classic Hallmark Christmas, Nordic Noir and other movie scenarios and tropes in Danish and English.
 
 ## Features
 
@@ -13,7 +13,7 @@ A bingo game app built using Vue and TypeScript for iPad and mobile web featurin
 
 ## Bingo Squares
 
-Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 `src/game-data/**.ts` files. Defaults to the xmas game for now.
+Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 `src/game-data/**.ts` files.
 
 ## Technology Stack
 
