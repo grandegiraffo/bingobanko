@@ -1,7 +1,11 @@
 {
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "bingo",
   "main": "src/worker.ts",
   "compatibility_date": "2025-11-17",
+  "placement": {
+    "mode": "smart"
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"
@@ -9,7 +13,6 @@
   "observability": {
     "logs": {
       "enabled": true,
-      "level": "info",
       "head_sampling_rate": 1,
       "invocation_logs": true,
       "persist": true
