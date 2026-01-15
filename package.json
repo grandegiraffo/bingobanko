@@ -24,7 +24,7 @@
     "vue-i18n": "^11.2.8"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240129.0",
+    "@cloudflare/workers-types": "^4.20260109.0",
     "@eslint/js": "^9.12.0",
     "@tsconfig/node24": "^24.0.3",
     "@types/node": "^24.10.3",
@@ -36,13 +36,13 @@
     "eslint": "^9.12.0",
     "eslint-plugin-vue": "^10.6.2",
     "globals": "^17.0.0",
-    "happy-dom": "^20.0.11",
+    "happy-dom": "^20.1.0",
     "jiti": "^2.6.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.51.0",
-    "vite": "^7.2.4",
+    "typescript-eslint": "^8.52.0",
+    "vite": "^7.3.1",
     "vitest": "^4.0.16",
     "vue-tsc": "^3.2.1",
-    "wrangler": "^4.54.0"
+    "wrangler": "^4.58.0"
   }
 }
