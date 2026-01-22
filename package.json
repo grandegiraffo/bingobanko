@@ -15,7 +15,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "overrides": {
     "undici": "^7.18.2"
@@ -27,7 +27,7 @@
     "vue-i18n": "^11.2.8"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260120.0",
+    "@cloudflare/workers-types": "^4.20260122.0",
     "@eslint/js": "^9.39.2",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.10.9",
@@ -46,6 +46,6 @@
     "vite": "^7.3.1",
     "vitest": "^4.0.17",
     "vue-tsc": "^3.2.2",
-    "wrangler": "^4.59.2"
+    "wrangler": "^4.60.0"
   }
 }
