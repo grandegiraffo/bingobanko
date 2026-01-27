@@ -22,25 +22,25 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
     id: "a80sTro001",
     title: "Stoic Hero",
     description:
-      "The main protagonist rarely shows emotion, staying calm even under extreme pressure.",
+      "The main protagonist rarely shows emotion and stays calm under extreme pressure.",
     category: "character",
   },
   {
     id: "a80sTro002",
     title: "Wisecracking Partner",
-    description: "The sidekick keeps jokes flying even when danger is close.",
+    description: "The sidekick keeps the jokes coming even when danger is close.",
     category: "character",
   },
   {
     id: "a80sTro003",
     title: "Post-Punch One-Liner",
-    description: "A quip lands right after the bad guy hits the floor.",
+    description: "The quip lands right after the bad guy hits the floor.",
     category: "quote",
   },
   {
     id: "a80sTro004",
     title: "Training Montage",
-    description: "Quick cuts show the hero leveling up through drills and sweat.",
+    description: "Quick cuts show the hero getting sharper through drills and sweat.",
     category: "visual",
   },
   {
@@ -52,19 +52,19 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro006",
     title: "Explosion Walkaway",
-    description: "The hero does not look back as something huge detonates.",
+    description: "The hero does not look back as something huge blows up.",
     category: "visual",
   },
   {
     id: "a80sTro007",
     title: "Muscle Car Chase",
-    description: "A roaring car chase tears through streets or highways.",
+    description: "A roaring car chase blasts through streets or highways.",
     category: "visual",
   },
   {
     id: "a80sTro008",
     title: "Alley Sprint",
-    description: "Someone bolts through tight alleys with bins flying.",
+    description: "Someone bolts through tight alleys with trash cans flying.",
     category: "visual",
   },
   {
@@ -112,7 +112,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro016",
     title: "Partner Near Retirement",
-    description: "The veteran partner is days from retirement when trouble hits.",
+    description: "The veteran partner is days from retirement when trouble lands.",
     category: "subPlot",
   },
   {
@@ -124,7 +124,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro018",
     title: "Hostage Rescue",
-    description: "Civilians are trapped, raising the stakes for the showdown.",
+    description: "Civilians are trapped, raising the stakes fast.",
     category: "mainPlot",
   },
   {
@@ -136,7 +136,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro020",
     title: "Power Cut Tension",
-    description: "Lights die and the action shifts to shadows and silhouettes.",
+    description: "The power cuts and the action moves into shadows.",
     category: "visual",
   },
   {
@@ -172,7 +172,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro026",
     title: "Gadget Van",
-    description: "A rolling command van reveals surprising tech.",
+    description: "A rolling command van reveals unexpected tech.",
     category: "visual",
   },
   {
@@ -220,7 +220,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro034",
     title: "Glass Everywhere",
-    description: "Windows shatter in spectacular fashion.",
+    description: "Windows shatter in a shower of glass.",
     category: "visual",
   },
   {
@@ -232,7 +232,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro036",
     title: "Trench Coat Lead",
-    description: "A long coat flaps as the lead stalks crime scenes.",
+    description: "A long coat flaps as the lead moves through crime scenes.",
     category: "visual",
   },
   {
@@ -322,7 +322,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro051",
     title: "Kid Tech Whiz",
-    description: "A young hacker solves a problem with a quick hack.",
+    description: "A young hacker solves a problem with a fast hack.",
     category: "character",
   },
   {
@@ -376,7 +376,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro060",
     title: "Airport Finale",
-    description: "The climax races through an airport or hangar.",
+    description: "The climax runs through an airport or hangar.",
     category: "mainPlot",
   },
   {
@@ -387,7 +387,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro062",
-    title: "Armoury Loadout",
+    title: "Armory Loadout",
     description: "Weapons and gear are laid out before the mission.",
     category: "visual",
   },
@@ -460,7 +460,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro074",
     title: "\"Go! I'll hold them!\"",
-    description: "A sacrifice line buys the team a few seconds.",
+    description: "A sacrifice buys the team a few seconds.",
     category: "quote",
   },
   {
@@ -490,7 +490,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro079",
     title: "Big Hair",
-    description: "Huge hair and strong hold styles fill the screen.",
+    description: "Big hair and extra-hold styles fill the screen.",
     category: "visual",
   },
   {
@@ -513,7 +513,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro083",
-    title: "Toy-Line Wink",
+    title: "Toy-Line Nod",
     description: "A moment plays like a nod to merchandising.",
     category: "meta",
   },

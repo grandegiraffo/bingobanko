@@ -22,25 +22,25 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
     id: "a80sTro001",
     title: "Stenansigt-helt",
     description:
-      "Hovedpersonen viser sjældent følelser og forbliver rolig under ekstremt pres.",
+      "Hovedpersonen viser sjældent følelser og holder sig rolig under ekstremt pres.",
     category: "character",
   },
   {
     id: "a80sTro002",
     title: "Kvikkæftede makker",
-    description: "Sidekicket fyrer jokes af, selv når faren er nær.",
+    description: "Makkeren fyrer jokes af, selv når faren er tæt på.",
     category: "character",
   },
   {
     id: "a80sTro003",
     title: "Kæk bemærkning",
-    description: "En bemærkning falder, lige efter skurken ryger i gulvet.",
+    description: "Bemærkningen falder lige efter skurken rammer gulvet.",
     category: "quote",
   },
   {
     id: "a80sTro004",
     title: "Træningsmontage",
-    description: "Hurtige klip viser helten blive bedre gennem sved og øvelser.",
+    description: "Hurtige klip viser helten blive bedre gennem sved og træning.",
     category: "visual",
   },
   {
@@ -52,19 +52,19 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro006",
     title: "Eksplosion uden at se sig tilbage",
-    description: "Helten kigger ikke tilbage, mens noget stort eksploderer.",
+    description: "Helten kigger ikke tilbage, mens noget stort går i luften.",
     category: "visual",
   },
   {
     id: "a80sTro007",
     title: "Muskelbiljagt",
-    description: "En brølende biljagt flænser gader eller motorveje.",
+    description: "En brølende biljagt flår gennem gader og motorveje.",
     category: "visual",
   },
   {
     id: "a80sTro008",
     title: "Sprint gennem baggyder",
-    description: "Nogen spurter gennem smalle gyder med skraldespande flyvende.",
+    description: "Nogen spurter gennem smalle gyder, mens skraldespandene flyver.",
     category: "visual",
   },
   {
@@ -76,7 +76,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro010",
     title: "Opgør på lager",
-    description: "Det sidste slagsmål foregår i et enormt lagerlokale.",
+    description: "Det sidste slagsmål ender i et enormt lagerlokale.",
     category: "mainPlot",
   },
   {
@@ -88,19 +88,19 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro012",
     title: "Hængende på bus",
-    description: "En karakter klamrer sig til ydersiden af en kørende bus.",
+    description: "En karakter hænger på ydersiden af en kørende bus.",
     category: "visual",
   },
   {
     id: "a80sTro013",
     title: "Finale ved havnen",
-    description: "Klimaks rykker til havnen med kraner og containere.",
+    description: "Klimaks rykker til havnen blandt kraner og containere.",
     category: "mainPlot",
   },
   {
     id: "a80sTro014",
     title: "Udenlandsk bagmand",
-    description: "Skurken er en kold outsider med tydelig accent.",
+    description: "Skurken er en kold outsider med kraftig accent.",
     category: "character",
   },
   {
@@ -112,7 +112,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro016",
     title: "Makker på vej på pension",
-    description: "Den garvede partner har få dage tilbage, før det går galt.",
+    description: "Den garvede partner har kun få dage tilbage, før noget går galt.",
     category: "subPlot",
   },
   {
@@ -124,7 +124,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro018",
     title: "Gidselredning",
-    description: "Civile er fanget, og indsatsen stiger markant.",
+    description: "Civile er fanget, og indsatsen stiger.",
     category: "mainPlot",
   },
   {
@@ -142,19 +142,19 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro021",
     title: "Reglerne er ligegyldige",
-    description: "Helten ignorerer procedurer for at få resultat.",
+    description: "Helten ignorerer procedurer for at få resultatet.",
     category: "character",
   },
   {
     id: "a80sTro022",
     title: "Ensom ulv",
-    description: "En solo-operatør stoler ikke på hold og går alene.",
+    description: "En solo-operatør stoler ikke på holdet og går alene.",
     category: "character",
   },
   {
     id: "a80sTro023",
     title: "Taskforce samles",
-    description: "En hårdtslående enhed samles til missionen.",
+    description: "En hårdtslående enhed samles til mission.",
     category: "mainPlot",
   },
   {
@@ -166,13 +166,13 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro025",
     title: "Forræderi indefra",
-    description: "Nogen i teamet lækker information.",
+    description: "Nogen i teamet lækker oplysninger.",
     category: "subPlot",
   },
   {
     id: "a80sTro026",
     title: "Gadget-vogn",
-    description: "En rullende kommandovogn afslører smart udstyr.",
+    description: "En rullende kommandovogn afslører avanceret udstyr.",
     category: "visual",
   },
   {
@@ -184,7 +184,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro028",
     title: "Skurkens base",
-    description: "De kriminelle opererer fra et stærkt bevogtet skjul.",
+    description: "De kriminelle opererer fra et stærkt bevogtet skjulested.",
     category: "visual",
   },
   {
@@ -196,7 +196,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro030",
     title: "En mod en hær",
-    description: "Én helt tager kampen mod en hel gruppe håndlangere.",
+    description: "En helt tager kampen mod en hel gruppe håndlangere.",
     category: "mainPlot",
   },
   {
@@ -208,7 +208,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro032",
     title: "Uopslidelig bil",
-    description: "Heltenes bil overlever stød, der burde knuse den.",
+    description: "Heltenes bil overlever stød, der burde have knust den.",
     category: "visual",
   },
   {
@@ -220,7 +220,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro034",
     title: "Knust glas overalt",
-    description: "Vinduer splintres på spektakulær vis.",
+    description: "Vinduer splintres på overdrevet vis.",
     category: "visual",
   },
   {
@@ -232,7 +232,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro036",
     title: "Trenchcoat-helt",
-    description: "En lang frakke flagrer, mens helten bevæger sig rundt.",
+    description: "En lang frakke flagrer, mens helten bevæger sig.",
     category: "visual",
   },
   {
@@ -250,7 +250,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro039",
     title: "Avisafsløring",
-    description: "En overskrift eller udklip leverer vigtig info.",
+    description: "En overskrift eller et udklip leverer vigtig info.",
     category: "visual",
   },
   {
@@ -261,7 +261,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro041",
-    title: "Freeze-frame slutning",
+    title: "Freeze-frame-slutning",
     description: "Det sidste billede fryser på en heroisk pose.",
     category: "meta",
   },
@@ -285,7 +285,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro045",
-    title: "Buddy-cop-banter",
+    title: "Buddy-cop-drilleri",
     description: "Hovedpersonerne bytter jokes og brok midt i missionen.",
     category: "quote",
   },
@@ -315,7 +315,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro050",
-    title: "Blueprint over hemmelig base",
+    title: "Plantegning af hemmelig base",
     description: "Et skema afslører skurkens indretning.",
     category: "visual",
   },
@@ -376,7 +376,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro060",
     title: "Finale i lufthavn",
-    description: "Klimaks løber gennem en lufthavn eller hangar.",
+    description: "Klimaks udspiller sig i en lufthavn eller hangar.",
     category: "mainPlot",
   },
   {
@@ -394,7 +394,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro063",
     title: "Krigsflashback",
-    description: "En tidligere konflikt dukker op i minder.",
+    description: "En tidligere konflikt dukker op i flashbacks.",
     category: "subPlot",
   },
   {
@@ -411,14 +411,14 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro066",
-    title: "Kravat-justering",
-    description: "Helten retter slips, før eller efter slagsmålet.",
+    title: "Slips-justering",
+    description: "Helten retter slipset før eller efter slagsmålet.",
     category: "visual",
   },
   {
     id: "a80sTro067",
     title: "Flænget skjorte",
-    description: "En revnet skjorte viser heltenes kampmærker.",
+    description: "En revnet skjorte viser heltens kampmærker.",
     category: "visual",
   },
   {
@@ -460,7 +460,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro074",
     title: "\"Gå! Jeg holder dem tilbage!\"",
-    description: "En offerreplik køber teamet få sekunder.",
+    description: "En ofringsreplik køber teamet få sekunder.",
     category: "quote",
   },
   {
@@ -514,7 +514,7 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   {
     id: "a80sTro083",
     title: "Merchandise-nik",
-    description: "Et øjeblik føles som et wink til legetøjslinjen.",
+    description: "Et øjeblik føles som et nik til legetøjslinjen.",
     category: "meta",
   },
   {
@@ -525,8 +525,8 @@ const GameSquares: Array<Omit<BingoSquare, "marked">> = [
   },
   {
     id: "a80sTro085",
-    title: "Tema-sang sting",
-    description: "Et signaturtema kører ind på afgørende tidspunkter.",
+    title: "Tema-sang-stik",
+    description: "Et signaturtema dukker op på de afgørende tidspunkter.",
     category: "meta",
   }
 ];
