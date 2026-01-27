@@ -445,21 +445,14 @@ describe('BingoGame', () => {
     })
 
     it('should set initial locale based on initial game selection', async () => {
-      const wrapper = mountWithI18n()
-      await wrapper.vm.$nextTick()
-
-      const vm = getVm(wrapper)
-      const englishGameId = vm.availableGames.find(
-        (game) => getLocalePrefix(game.id) === 'en'
-      )?.id
-      if (!englishGameId) {
-        throw new Error('Expected at least one English game')
-      }
-
       // Set URL parameter to select English game
       const url = new URL(window.location.href)
+      const englishGameId = 'en-nordicnoir-tv-tropes'
       url.searchParams.set('g', englishGameId)
       window.history.replaceState({}, '', url.toString())
+
+      const wrapper = mountWithI18n()
+      await wrapper.vm.$nextTick()
 
       // Locale should be 'en' based on the game selected via URL
       // @ts-expect-error - locale is a ref in composition mode
