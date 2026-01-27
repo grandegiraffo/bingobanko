@@ -1,14 +1,14 @@
 <template>
   <div class="bingo-container">
     <header class="bingo-header">
-      <h1>{{ selectedGame?.name || t('game.unknownGame') }}</h1>
-      
+      <h1>{{ selectedGame?.name || t("game.unknownGame") }}</h1>
+
       <div class="subtitle">
-        {{ t('game.subtitle') }}
+        {{ t("game.subtitle") }}
       </div>
       <div class="scoreboard">
         <div class="score-label">
-          {{ t('game.score.label') }}
+          {{ t("game.score.label") }}
         </div>
         <div class="score-value">
           <span class="score-current">{{ markedCount }}</span>
@@ -68,20 +68,20 @@
           class="shuffle-button"
           @click="requestConfirm('shuffle')"
         >
-          {{ t('buttons.shuffle') }}
+          {{ t("buttons.shuffle") }}
         </button>
         <button
           class="reset-button"
           @click="requestConfirm('reset')"
         >
-          {{ t('buttons.reset') }}
+          {{ t("buttons.reset") }}
         </button>
         <div class="game-select">
           <label
             class="game-select-label"
             for="game-select"
           >
-            {{ t('gameSelect.label') }}
+            {{ t("gameSelect.label") }}
           </label>
           <select
             id="game-select"
@@ -104,18 +104,21 @@
           href="https://github.com/hjepsen"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ t('credits.conceptBy') }} 🤎🐻</a> ⸺ <a
+        >{{ t("credits.conceptBy") }} 🤎🐻</a>
+        ⸺
+        <a
           href="https://github.com/grandegiraffo/bingobanko"
           target="_blank"
           rel="noopener noreferrer"
-        >{{ t('credits.openSource') }} <img
-          class="emoji"
-          title=":octocat:"
-          alt=":octocat:"
-          src="https://github.githubassets.com/images/icons/emoji/octocat.png"
-          height="20"
-          width="20"
-        >🦒
+        >{{ t("credits.openSource") }}
+          <img
+            class="emoji"
+            title=":octocat:"
+            alt=":octocat:"
+            src="https://github.githubassets.com/images/icons/emoji/octocat.png"
+            height="20"
+            width="20"
+          >🦒
         </a>
       </div>
     </footer>
@@ -179,6 +182,9 @@ const { t } = useI18n();
 type ConfirmableAction = "shuffle" | "reset" | "changeGame";
 
 const MAX_BOARD_SIZE = 15;
+const DEFAULT_GAME_ID = "en-80s-action-tv-tropes";
+const GAME_PARAM = "g";
+const ORDER_PARAM = "r";
 
 type GameId = string;
 
@@ -190,9 +196,6 @@ type GameDefinition = {
   templateById: Record<string, Omit<BingoSquare, "marked">>;
 };
 
-const GAME_PARAM = "g";
-const ORDER_PARAM = "r";
-
 const deriveGameIdFromPath = (path: string): string => {
   const match = path.match(/([^/]+)\.ts$/);
   return match?.[1] ?? path;
@@ -201,16 +204,15 @@ const deriveGameIdFromPath = (path: string): string => {
 const buildGameDefinition = (
   id: GameId,
   name: string,
-  squares: Array<Omit<BingoSquare, "marked">>
+  squares: Array<Omit<BingoSquare, "marked">>,
 ): GameDefinition => {
   const allTemplateIds = squares.map((template) => template.id);
-  const templateById = squares.reduce<Record<string, Omit<BingoSquare, "marked">>>(
-    (acc, template) => {
-      acc[template.id] = template;
-      return acc;
-    },
-    {}
-  );
+  const templateById = squares.reduce<
+    Record<string, Omit<BingoSquare, "marked">>
+  >((acc, template) => {
+    acc[template.id] = template;
+    return acc;
+  }, {});
   return { id, name, squares, allTemplateIds, templateById };
 };
 
@@ -218,23 +220,22 @@ const gameModules = import.meta.glob<BingoGameDataModule>("../game-data/*.ts", {
   eager: true,
 });
 
-const gamesById = Object.entries(gameModules).reduce<Record<string, GameDefinition>>(
-  (acc, [path, mod]) => {
-    const game = mod.GameModule;
-    const id = game?.GameId ?? deriveGameIdFromPath(path);
-    acc[id] = buildGameDefinition(id, game.GameName, game.GameSquares);
-    return acc;
-  },
-  {}
-);
+const gamesById = Object.entries(gameModules).reduce<
+  Record<string, GameDefinition>
+>((acc, [path, mod]) => {
+  const game = mod.GameModule;
+  const id = game?.GameId ?? deriveGameIdFromPath(path);
+  acc[id] = buildGameDefinition(id, game.GameName, game.GameSquares);
+  return acc;
+}, {});
 
 const availableGames = computed(() =>
-  Object.values(gamesById).sort((a, b) => a.name.localeCompare(b.name))
+  Object.values(gamesById).sort((a, b) => a.name.localeCompare(b.name)),
 );
 
 const defaultGameId = computed(() => {
-  if (gamesById["xmas-tv-tropes"]) return "xmas-tv-tropes";
-  return availableGames.value[0]?.id ?? "xmas-tv-tropes";
+  if (gamesById[DEFAULT_GAME_ID]) return DEFAULT_GAME_ID;
+  return availableGames.value[0]?.id ?? DEFAULT_GAME_ID;
 });
 
 const getBoardSize = (game: GameDefinition) =>
@@ -248,7 +249,7 @@ const encodeOrder = (order: string[]): string | null => {
 
 const decodeOrder = (
   value: string | null,
-  game: GameDefinition
+  game: GameDefinition,
 ): string[] | null => {
   const boardSize = getBoardSize(game);
   if (boardSize === 0) return [];
@@ -338,7 +339,10 @@ const resolveInitialOrder = (gameId: GameId): string[] => {
   return randomizedOrder;
 };
 
-const createSquares = (game: GameDefinition, order: string[]): BingoSquare[] => {
+const createSquares = (
+  game: GameDefinition,
+  order: string[],
+): BingoSquare[] => {
   const fallbackTemplate = game.squares[0];
   if (!fallbackTemplate) return [];
   return order.map((templateId) => {
@@ -369,9 +373,9 @@ const getCategoryIcon = (category: BingoSquare["category"]) =>
 const selectedGameId = ref<GameId>(resolveInitialGameId());
 const selectedGame = computed(() => gamesById[selectedGameId.value]);
 
-const extractLocaleFromGameId = (gameId: string): 'da' | 'en' | null => {
-  const prefix = gameId.split('-')[0];
-  if (prefix === 'da' || prefix === 'en') {
+const extractLocaleFromGameId = (gameId: string): "da" | "en" | null => {
+  const prefix = gameId.split("-")[0];
+  if (prefix === "da" || prefix === "en") {
     return prefix;
   }
   return null;
@@ -390,7 +394,7 @@ syncLocaleWithGame(selectedGameId.value);
 
 const currentOrder = ref<string[]>(resolveInitialOrder(selectedGameId.value));
 const bingoSquares = ref<BingoSquare[]>(
-  createSquares(selectedGame.value, currentOrder.value)
+  createSquares(selectedGame.value, currentOrder.value),
 );
 
 const isAnimating = ref(false);
@@ -476,7 +480,7 @@ const setNewOrder = (order: string[]) => {
 };
 
 const markedCount = computed(
-  () => bingoSquares.value.filter((square) => square.marked).length
+  () => bingoSquares.value.filter((square) => square.marked).length,
 );
 
 const toggleSquare = (index: number) => {
@@ -491,7 +495,7 @@ const performResetMarks = async () => {
     clearResetTimeouts();
   }
   isResetting = true;
-  
+
   const delay = (ms: number) =>
     new Promise<void>((resolve) => {
       const timeoutId =
@@ -506,7 +510,7 @@ const performResetMarks = async () => {
             }, ms) as unknown as number);
       resetTimeouts.push(timeoutId);
     });
-  
+
   const cascadeDelay = 23; // milliseconds between each square
 
   // Cascade mark all squares
@@ -523,7 +527,7 @@ const performResetMarks = async () => {
     square.marked = false;
     await delay(cascadeDelay);
   }
-  
+
   isResetting = false;
 };
 
@@ -552,33 +556,33 @@ const pendingAction = ref<ConfirmableAction | null>(null);
 const confirmCopy = computed(() => {
   if (pendingAction.value === "shuffle") {
     return {
-      title: t('confirm.shuffle.title'),
-      message: t('confirm.shuffle.message'),
-      confirmLabel: t('confirm.shuffle.confirmLabel'),
-      cancelLabel: t('confirm.shuffle.cancelLabel'),
+      title: t("confirm.shuffle.title"),
+      message: t("confirm.shuffle.message"),
+      confirmLabel: t("confirm.shuffle.confirmLabel"),
+      cancelLabel: t("confirm.shuffle.cancelLabel"),
     };
   }
   if (pendingAction.value === "reset") {
     return {
-      title: t('confirm.reset.title'),
-      message: t('confirm.reset.message'),
-      confirmLabel: t('confirm.reset.confirmLabel'),
-      cancelLabel: t('confirm.reset.cancelLabel'),
+      title: t("confirm.reset.title"),
+      message: t("confirm.reset.message"),
+      confirmLabel: t("confirm.reset.confirmLabel"),
+      cancelLabel: t("confirm.reset.cancelLabel"),
     };
   }
   if (pendingAction.value === "changeGame") {
     return {
-      title: t('confirm.changeGame.title'),
-      message: t('confirm.changeGame.message'),
-      confirmLabel: t('confirm.changeGame.confirmLabel'),
-      cancelLabel: t('confirm.changeGame.cancelLabel'),
+      title: t("confirm.changeGame.title"),
+      message: t("confirm.changeGame.message"),
+      confirmLabel: t("confirm.changeGame.confirmLabel"),
+      cancelLabel: t("confirm.changeGame.cancelLabel"),
     };
   }
   return {
-    title: t('confirm.default.title'),
-    message: t('confirm.default.message'),
-    confirmLabel: t('confirm.default.confirmLabel'),
-    cancelLabel: t('confirm.default.cancelLabel'),
+    title: t("confirm.default.title"),
+    message: t("confirm.default.message"),
+    confirmLabel: t("confirm.default.confirmLabel"),
+    cancelLabel: t("confirm.default.cancelLabel"),
   };
 });
 
@@ -604,7 +608,10 @@ const acceptConfirm = async () => {
   } else if (pendingAction.value === "reset") {
     scrollToTopOfWindow();
     await performResetMarks();
-  } else if (pendingAction.value === "changeGame" && pendingGameId.value !== null) {
+  } else if (
+    pendingAction.value === "changeGame" &&
+    pendingGameId.value !== null
+  ) {
     selectedGameId.value = pendingGameId.value;
     pendingGameId.value = null;
     scrollToTopOfWindow();
@@ -616,13 +623,13 @@ const acceptConfirm = async () => {
 const onGameSelectChange = (event: Event) => {
   const target = event.target as HTMLSelectElement;
   const newGameId = target.value as GameId;
-  
+
   if (newGameId === selectedGameId.value) return;
-  
+
   // Store the pending game ID and request confirmation
   pendingGameId.value = newGameId;
   requestConfirm("changeGame");
-  
+
   // Reset the select back to the current game until confirmed
   target.value = selectedGameId.value;
 };
@@ -632,9 +639,9 @@ const shareNotice = ref<string>("");
 let shareResetTimer: number | null = null;
 
 const shareButtonLabel = computed(() => {
-  if (shareStatus.value === "copied") return t('buttons.copied');
-  if (shareStatus.value === "error") return t('buttons.error');
-  return t('buttons.copyLink');
+  if (shareStatus.value === "copied") return t("buttons.copied");
+  if (shareStatus.value === "error") return t("buttons.error");
+  return t("buttons.copyLink");
 });
 
 const clearShareTimer = () => {
@@ -684,10 +691,7 @@ const copyShareLink = async () => {
     }
     setShareFeedback("copied", "");
   } catch {
-    setShareFeedback(
-      "error",
-      t('errors.copyFailed')
-    );
+    setShareFeedback("error", t("errors.copyFailed"));
   }
 };
 
