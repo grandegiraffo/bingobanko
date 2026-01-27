@@ -9,7 +9,7 @@ const GameId = "en-nordicnoir-tv-tropes";
 /**
  * Name of the Bingo Game
  */
-const GameName = "🇬🇧🌧️ Nordic Noir Crime Bingo ❄️🇬🇧";
+const GameName = "🇬🇧🌧️ Nordic Noir Crime ❄️🇬🇧";
 
 /**
  * Nordic Noir TV Tropes Bingo Squares.

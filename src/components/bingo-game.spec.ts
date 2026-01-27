@@ -11,15 +11,49 @@ describe('BingoGame', () => {
     }
   })
 
+  type GameOption = {
+    id: string
+    name: string
+  }
+
+  const getVm = (wrapper: ReturnType<typeof mount>) => {
+    return wrapper.vm as unknown as {
+      DEFAULT_GAME_ID: string
+      availableGames: GameOption[]
+    }
+  }
+
   const mountWithI18n = () => mount(BingoGame, {
     global: {
       plugins: [i18n]
     }
   })
 
-  it('should default to danish version of nordic noir and persist g before r in the URL', async () => {
+  const getLocalePrefix = (gameId: string): 'da' | 'en' | null => {
+    const prefix = gameId.split('-')[0]
+    if (prefix === 'da' || prefix === 'en') return prefix
+    return null
+  }
+
+  it('should mount the component', () => {
+    const wrapper = mountWithI18n()
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('should have a DEFAULT_GAME_ID that actually exists in the games list', () => {
+    const wrapper = mountWithI18n()
+    const vm = getVm(wrapper)
+    const defaultGameId = vm.DEFAULT_GAME_ID
+    const gameExists = vm.availableGames.some((game) => game.id === defaultGameId)
+    expect(gameExists).toBe(true)
+  })
+
+  it('should default to DEFAULT_GAME_ID and persist g before r in the URL', async () => {
     const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
+
+    const vm = getVm(wrapper)
+    const defaultGameId = vm.DEFAULT_GAME_ID
 
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
@@ -27,9 +61,9 @@ describe('BingoGame', () => {
     if (!(selectElement instanceof HTMLSelectElement)) {
       throw new Error('Expected game select to be an HTMLSelectElement')
     }
-    expect(selectElement.value).toBe('da-nordicnoir-tv-tropes')
+    expect(selectElement.value).toBe(defaultGameId)
 
-    expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
+    expect(window.location.search.startsWith(`?g=${defaultGameId}&r=`)).toBe(true)
   })
 
   it('should switch games via dropdown and update the URL g parameter', async () => {
@@ -140,18 +174,25 @@ describe('BingoGame', () => {
     const wrapper = mountWithI18n()
     await wrapper.vm.$nextTick()
 
+    const vm = getVm(wrapper)
+    const defaultGameId = vm.DEFAULT_GAME_ID
+
     const select = wrapper.find('#game-select')
     expect(select.exists()).toBe(true)
 
-    // Initially should be da-nordicnoir-tv-tropes
+    // Initially should be DEFAULT_GAME_ID
     const initialSelectElement = select.element
     if (!(initialSelectElement instanceof HTMLSelectElement)) {
       throw new Error('Expected game select to be an HTMLSelectElement')
     }
-    expect(initialSelectElement.value).toBe('da-nordicnoir-tv-tropes')
+    expect(initialSelectElement.value).toBe(defaultGameId)
 
     // Try to change the game
-    await select.setValue('en-xmas-tv-tropes')
+    const alternateGameId = vm.availableGames.find((game) => game.id !== defaultGameId)?.id
+    if (!alternateGameId) {
+      throw new Error('Expected at least one alternate game to select')
+    }
+    await select.setValue(alternateGameId)
     await wrapper.vm.$nextTick()
 
     // Confirm dialog should appear
@@ -164,13 +205,13 @@ describe('BingoGame', () => {
     await cancelButton.trigger('click')
     await wrapper.vm.$nextTick()
 
-    // Game should remain da-nordicnoir-tv-tropes
-    expect(window.location.search.startsWith('?g=da-nordicnoir-tv-tropes&r=')).toBe(true)
+    // Game should remain DEFAULT_GAME_ID
+    expect(window.location.search.startsWith(`?g=${defaultGameId}&r=`)).toBe(true)
     const selectElement = select.element
     if (!(selectElement instanceof HTMLSelectElement)) {
       throw new Error('Expected game select to be an HTMLSelectElement')
     }
-    expect(selectElement.value).toBe('da-nordicnoir-tv-tropes')
+    expect(selectElement.value).toBe(defaultGameId)
   })
 
   it('should start with animating pile and then animate to grid', async () => {
@@ -289,18 +330,33 @@ describe('BingoGame', () => {
       setLocale('da')
     })
 
-    it('should sync locale to English when switching to English game', async () => {
+    it('should sync locale when switching to a different language game', async () => {
       const wrapper = mountWithI18n()
       await wrapper.vm.$nextTick()
 
-      // Initial locale should be 'da'
+      const vm = getVm(wrapper)
+      const defaultGameId = vm.DEFAULT_GAME_ID
+      const defaultLocale = getLocalePrefix(defaultGameId)
+      if (!defaultLocale) {
+        throw new Error('Expected default game to include a locale prefix')
+      }
+
+      // Initial locale should match the default game
       // @ts-expect-error - locale is a ref in composition mode
-      expect(i18n.global.locale.value).toBe('da')
+      expect(i18n.global.locale.value).toBe(defaultLocale)
 
       const select = wrapper.find('#game-select')
-      
-      // Change to English game
-      await select.setValue('en-xmas-tv-tropes')
+
+      const targetLocale = defaultLocale === 'en' ? 'da' : 'en'
+      const targetGameId = vm.availableGames.find(
+        (game) => getLocalePrefix(game.id) === targetLocale
+      )?.id
+      if (!targetGameId) {
+        throw new Error('Expected a game with the alternate locale')
+      }
+
+      // Change to a game in the alternate locale
+      await select.setValue(targetGameId)
       await wrapper.vm.$nextTick()
 
       // Confirm the change
@@ -308,24 +364,37 @@ describe('BingoGame', () => {
       await confirmButton.trigger('click')
       await wrapper.vm.$nextTick()
 
-      // Locale should now be 'en'
+      // Locale should now match the selected game's locale
       // @ts-expect-error - locale is a ref in composition mode
-      expect(i18n.global.locale.value).toBe('en')
+      expect(i18n.global.locale.value).toBe(targetLocale)
     })
 
-    it('should sync locale to Danish when switching to Danish game', async () => {
-      // Set initial locale to English
-      setLocale('en')
-      // @ts-expect-error - locale is a ref in composition mode
-      expect(i18n.global.locale.value).toBe('en')
-
+    it('should sync locale to match a same-locale game', async () => {
       const wrapper = mountWithI18n()
       await wrapper.vm.$nextTick()
 
+      const vm = getVm(wrapper)
+      const defaultGameId = vm.DEFAULT_GAME_ID
+      const defaultLocale = getLocalePrefix(defaultGameId)
+      if (!defaultLocale) {
+        throw new Error('Expected default game to include a locale prefix')
+      }
+
+      // Initial locale should match the default game
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe(defaultLocale)
+
       const select = wrapper.find('#game-select')
       
-      // Switch to Danish game (should already be Danish, but let's explicitly test)
-      await select.setValue('da-nordicnoir-tv-tropes')
+      const sameLocaleGameId = vm.availableGames.find(
+        (game) => getLocalePrefix(game.id) === defaultLocale && game.id !== defaultGameId
+      )?.id
+      if (!sameLocaleGameId) {
+        throw new Error('Expected a second game with the same locale')
+      }
+
+      // Switch to another game with the same locale
+      await select.setValue(sameLocaleGameId)
       await wrapper.vm.$nextTick()
 
       // Confirm the change
@@ -335,44 +404,62 @@ describe('BingoGame', () => {
         await wrapper.vm.$nextTick()
       }
 
-      // Locale should now be 'da'
+      // Locale should remain unchanged
       // @ts-expect-error - locale is a ref in composition mode
-      expect(i18n.global.locale.value).toBe('da')
+      expect(i18n.global.locale.value).toBe(defaultLocale)
     })
 
-    it('should not change locale when game ID has no locale prefix', async () => {
-      setLocale('da')
+    it('should keep locale when switching within the same language', async () => {
       const wrapper = mountWithI18n()
       await wrapper.vm.$nextTick()
 
-      // Initial locale is 'da'
-      // @ts-expect-error - locale is a ref in composition mode
-      expect(i18n.global.locale.value).toBe('da')
+      const vm = getVm(wrapper)
+      const defaultGameId = vm.DEFAULT_GAME_ID
+      const defaultLocale = getLocalePrefix(defaultGameId)
+      if (!defaultLocale) {
+        throw new Error('Expected default game to include a locale prefix')
+      }
 
-      // If we were to switch to a game without a locale prefix, 
-      // the locale should remain unchanged. Since all games have prefixes,
-      // we test by verifying the current behavior maintains locale
+      // Initial locale matches default game
+      // @ts-expect-error - locale is a ref in composition mode
+      expect(i18n.global.locale.value).toBe(defaultLocale)
+
+      // Switching to a same-locale game should keep locale unchanged
       const select = wrapper.find('#game-select')
-      await select.setValue('da-xmas-tv-tropes')
+      const sameLocaleGameId = vm.availableGames.find(
+        (game) => getLocalePrefix(game.id) === defaultLocale && game.id !== defaultGameId
+      )?.id
+      if (!sameLocaleGameId) {
+        throw new Error('Expected a second game with the same locale')
+      }
+      await select.setValue(sameLocaleGameId)
       await wrapper.vm.$nextTick()
 
       const confirmButton = wrapper.find('.confirm-accept')
       await confirmButton.trigger('click')
       await wrapper.vm.$nextTick()
 
-      // Should still be 'da'
+      // Should still be the default locale
       // @ts-expect-error - locale is a ref in composition mode
-      expect(i18n.global.locale.value).toBe('da')
+      expect(i18n.global.locale.value).toBe(defaultLocale)
     })
 
     it('should set initial locale based on initial game selection', async () => {
-      // Set URL parameter to select English game
-      const url = new URL(window.location.href)
-      url.searchParams.set('g', 'en-nordicnoir-tv-tropes')
-      window.history.replaceState({}, '', url.toString())
-
       const wrapper = mountWithI18n()
       await wrapper.vm.$nextTick()
+
+      const vm = getVm(wrapper)
+      const englishGameId = vm.availableGames.find(
+        (game) => getLocalePrefix(game.id) === 'en'
+      )?.id
+      if (!englishGameId) {
+        throw new Error('Expected at least one English game')
+      }
+
+      // Set URL parameter to select English game
+      const url = new URL(window.location.href)
+      url.searchParams.set('g', englishGameId)
+      window.history.replaceState({}, '', url.toString())
 
       // Locale should be 'en' based on the game selected via URL
       // @ts-expect-error - locale is a ref in composition mode

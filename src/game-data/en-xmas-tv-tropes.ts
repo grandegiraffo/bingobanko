@@ -9,7 +9,7 @@ const GameId = "en-xmas-tv-tropes";
 /**
  * Name of the Bingo Game
  */
-const GameName = "🇬🇧🎄 Hallmark Christmas Movie Bingo 🎄🇬🇧";
+const GameName = "🇬🇧🎄 Hallmark Christmas Movie 🎄🇬🇧";
 
 /**
  * Xmas Romance Movie Tropes Bingo Squares
