@@ -24,7 +24,7 @@
     "vue-i18n": "^11.2.8"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260127.0",
+    "@cloudflare/workers-types": "^4.20260130.0",
     "@eslint/js": "^9.39.2",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.10.9",
@@ -43,6 +43,6 @@
     "vite": "^7.3.1",
     "vitest": "^4.0.17",
     "vue-tsc": "^3.2.4",
-    "wrangler": "^4.61.0"
+    "wrangler": "^4.61.1"
   }
 }
