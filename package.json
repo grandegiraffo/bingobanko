@@ -4,14 +4,14 @@
   "version": "0.0.3",
   "type": "module",
   "engines": {
-    "node": "^24.13.1",
-    "npm": ">=10.9.0"
+    "node": "^24.14.0"
   },
+  "packageManager": "pnpm@10.30.3",
   "scripts": {
     "dev": "vite",
-    "build": "npm run type-check && vite build",
+    "build": "pnpm run type-check && vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
-    "deploy:worker": "BASE_PATH=/ npm run build && wrangler deploy --config wrangler.jsonc",
+    "deploy:worker": "pnpm run build && wrangler deploy --config wrangler.jsonc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest",
@@ -19,16 +19,16 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@hugeicons/core-free-icons": "^3.1.1",
+    "@hugeicons/core-free-icons": "^3.3.0",
     "@hugeicons/vue": "^1.0.4",
     "vue": "^3.5.29",
     "vue-i18n": "^11.2.8"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260304.0",
+    "@cloudflare/workers-types": "^4.20260305.0",
     "@eslint/js": "^10.0.1",
     "@tsconfig/node24": "^24.0.4",
-    "@types/node": "^24.10.13",
+    "@types/node": "^24.10.14",
     "@vitejs/plugin-vue": "^6.0.4",
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
@@ -47,8 +47,15 @@
     "vue-tsc": "^3.2.5",
     "wrangler": "^4.68.1"
   },
-  "overrides": {
-    "glob": "latest",
-    "minimatch": "^10.2.1"
+  "pnpm": {
+    "overrides": {
+      "glob": "latest",
+      "minimatch": "^10.2.1"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }
