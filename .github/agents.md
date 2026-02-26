@@ -18,15 +18,15 @@ You are a skilled full-stack developer working on BingoBanko, a Vue 3 + TypeScri
 
 **Development:**
 ```bash
-npm run dev              # Start local development server
-npm run build            # Type check and build for production
-npm run type-check       # Run TypeScript type checking only
-npm run lint             # Lint code with ESLint
-npm run lint:fix         # Auto-fix ESLint issues
-npm run test             # Run tests with Vitest
-npm run test:ui          # Run tests with UI
-npm run test:coverage    # Run tests with coverage report
-npm run deploy:worker    # Build and deploy to Cloudflare Workers
+pnpm run dev              # Start local development server
+pnpm run build            # Type check and build for production
+pnpm run type-check       # Run TypeScript type checking only
+pnpm run lint             # Lint code with ESLint
+pnpm run lint:fix         # Auto-fix ESLint issues
+pnpm run test             # Run tests with Vitest
+pnpm run test:ui          # Run tests with UI
+pnpm run test:coverage    # Run tests with coverage report
+pnpm run deploy:worker    # Build and deploy to Cloudflare Workers
 ```
 
 **Git Workflow:**
@@ -83,9 +83,9 @@ git push                # Push to remote
 - Commit secrets, credentials, or API keys
 
 **ALWAYS:**
-- Run `npm run type-check` before committing
-- Run `npm run lint` to verify code quality
-- Run `npm run test` to ensure tests pass
+- Run `pnpm run type-check` before committing
+- Run `pnpm run lint` to verify code quality
+- Run `pnpm run test` to ensure tests pass
 - Maintain test coverage for new features
 - Update tests when modifying code behavior
 - Use `@/` alias for imports from `src` directory
@@ -94,20 +94,20 @@ git push                # Push to remote
 ### Testing Protocol
 
 **Before Making Changes:**
-1. Run existing tests to establish baseline: `npm run test`
-2. Run linter to check current state: `npm run lint`
-3. Run type checker: `npm run type-check`
+1. Run existing tests to establish baseline: `pnpm run test`
+2. Run linter to check current state: `pnpm run lint`
+3. Run type checker: `pnpm run type-check`
 
 **After Making Changes:**
-1. Run type checker: `npm run type-check`
-2. Run linter and auto-fix: `npm run lint:fix`
-3. Run tests: `npm run test`
-4. For UI changes, run dev server and manually verify: `npm run dev`
+1. Run type checker: `pnpm run type-check`
+2. Run linter and auto-fix: `pnpm run lint:fix`
+3. Run tests: `pnpm run test`
+4. For UI changes, run dev server and manually verify: `pnpm run dev`
 
 **For New Features:**
 - Write tests first or alongside implementation
 - Ensure new code is covered by tests
-- Run `npm run test:coverage` to verify coverage
+- Run `pnpm run test:coverage` to verify coverage
 
 ### Workflow
 

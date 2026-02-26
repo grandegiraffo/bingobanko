@@ -17,14 +17,14 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 
 ## Development Commands
 
-- `npm run dev` - Start local development server
-- `npm run build` - Type check and build for production
-- `npm run type-check` - Run TypeScript type checking
-- `npm run lint` - Lint code with ESLint
-- `npm run lint:fix` - Auto-fix ESLint issues
-- `npm run test` - Run tests with Vitest
-- `npm run test:ui` - Run tests with UI
-- `npm run test:coverage` - Run tests with coverage report
+- `pnpm run dev` - Start local development server
+- `pnpm run build` - Type check and build for production
+- `pnpm run type-check` - Run TypeScript type checking
+- `pnpm run lint` - Lint code with ESLint
+- `pnpm run lint:fix` - Auto-fix ESLint issues
+- `pnpm run test` - Run tests with Vitest
+- `pnpm run test:ui` - Run tests with UI
+- `pnpm run test:coverage` - Run tests with coverage report
 
 ## Coding Conventions
 
@@ -96,7 +96,7 @@ BingoBanko is a bingo game web application featuring movie and TV tropes in Dani
 ## CI/CD Pipeline
 
 - Pull requests trigger CI workflow that runs: lint, build, and test with coverage
-- Deploy to Cloudflare Workers with `npm run deploy:worker` (uses `wrangler.jsonc`)
+- Deploy to Cloudflare Workers with `pnpm run deploy:worker` (uses `wrangler.jsonc`)
 - Node.js version is specified in `.nvmrc` file (v24)
 
 ## Additional Notes

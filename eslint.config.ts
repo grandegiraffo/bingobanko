@@ -1,10 +1,10 @@
-import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint';
+import type { Linter } from 'eslint';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import vuePlugin from 'eslint-plugin-vue';
 import globals from 'globals';
 
-type FlatConfigItem = FlatConfig.Config;
+type FlatConfigItem = Linter.Config;
 
 const vueConfigs: FlatConfigItem[] = (vuePlugin.configs['flat/recommended']).map(
   (config): FlatConfigItem => ({
