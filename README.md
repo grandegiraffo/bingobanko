@@ -17,6 +17,9 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 
 ## Technology Stack
 
+- **Node.js** - JavaScript runtime
+- **TypeScript** - Strongly typed JavaScript
+- **pnpm** - Performant package manager
 - **Vue** - Progressive JavaScript framework
 - **Vite** - Fast build tool and dev server
 - **Pure CSS** - No external styling dependencies
@@ -31,31 +34,59 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 
 ### Prerequisites
 
-- [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) to manage Node.js versions
-- [Node.js](https://nodejs.org/) (v24 LTS)
-- [Javascript package manager (npm)](https://docs.npmjs.com/cli/v11/configuring-npm/package-json) (v11) comes with Node.js
-
-### Installation
-
+#### Node.js (v24.x LTS) via [nvm](https://github.com/nvm-sh/nvm)
 ```bash
-# Install the correct version of Node.js via the `.nvmrc` file
-nvm use 
-
-# Install dependencies
-npm install
-
-# Start local development server
-npm run dev
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+source ~/.bashrc # or
+source ~/.zshrc # or just open a new terminal
+nvm install # picks up the version specified in the .nvmrc file
+```
+#### [pnpm](https://pnpm.io/installation) (v10.x)
+```bash
+curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-### Building for Production
+### Essential commands
 
 ```bash
-# To build locally, run
-npm run build
+# Install dependencies
+pnpm i
 
-# To build and deploy to Cloudflare Workers
-npm run deploy:worker
+# Run as local development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Preview production build
+pnpm preview
+
+# Update dependencies
+pnpm up
+
+# Type check
+pnpm type-check
+
+# Lint code
+pnpm lint
+
+# Lint and auto-fix
+pnpm lint:fix
+```
+
+### Deploying to Cloudflare Workers
+
+The app runs as a static site on Cloudflare Workers. Configuration is in `wrangler.jsonc`.
+
+```bash
+# Log in to Cloudflare
+pnpm dlx wrangler login
+
+# Implicit build and then deploy
+pnpm deploy:worker
+
+# Or just preview locally
+pnpm dlx wrangler dev --config wrangler.jsonc
 ```
 
 ## Usage
