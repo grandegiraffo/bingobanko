@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@hugeicons/core-free-icons':
-        specifier: ^3.3.0
-        version: 3.3.0
+        specifier: ^4.0.0
+        version: 4.0.0
       '@hugeicons/vue':
         specifier: ^1.0.4
         version: 1.0.4(vue@3.5.29(typescript@5.9.3))
@@ -360,8 +360,8 @@ packages:
     resolution: {integrity: sha512-bIZEUzOI1jkhviX2cp5vNyXQc6olzb2ohewQubuYlMXZ2Q/XjBO0x0XhGPvc9fjSIiUN0vw+0hq53BJ4eQSJKQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@hugeicons/core-free-icons@3.3.0':
-    resolution: {integrity: sha512-qYyr4JQ2eQIHTSTbITvnJvs6ERNK64D9gpwZnf2IyuG0exzqfyABLO/oTB71FB3RZPfu1GbwycdiGSo46apjMQ==}
+  '@hugeicons/core-free-icons@4.0.0':
+    resolution: {integrity: sha512-bzfbKumv3ke3ajbe2MyXi9i0I/cdsZ6n/mO9EfIPNSL++pHLqs7nSGRIVUtjF4xrrEyVkfhxssv4Jek8DPA6gA==}
 
   '@hugeicons/vue@1.0.4':
     resolution: {integrity: sha512-OtFEXbyW5jYUig98C/n/HygktLvfF5Ga6nN6gK8R0E0jCrVw3EfgoZZVXqo+xGxyIjH5R1wdbg6nJrtf6mzLKQ==}
@@ -1800,7 +1800,7 @@ snapshots:
       '@eslint/core': 1.1.0
       levn: 0.4.1
 
-  '@hugeicons/core-free-icons@3.3.0': {}
+  '@hugeicons/core-free-icons@4.0.0': {}
 
   '@hugeicons/vue@1.0.4(vue@3.5.29(typescript@5.9.3))':
     dependencies:
