@@ -9,9 +9,9 @@
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm run type-check && vite build",
+    "build": "pnpm type-check && vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
-    "deploy:worker": "pnpm run build && wrangler deploy --config wrangler.jsonc",
+    "deploy:worker": "pnpm build && wrangler deploy --config wrangler.jsonc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest",

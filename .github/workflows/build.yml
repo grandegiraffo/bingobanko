@@ -29,13 +29,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm run lint
+        run: pnpm lint
 
       - name: Build
-        run: pnpm run build
+        run: pnpm build
         env:
           CI: true
       - name: Tests with coverage
-        run: pnpm run test:coverage
+        run: pnpm test:coverage
         env:
           CI: true
