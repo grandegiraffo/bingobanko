@@ -5,10 +5,13 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
+    # Disable routine version-bump PRs; security update PRs (CVE/advisory-driven)
+    # are opened automatically by GitHub and are not affected by this limit.
+    open-pull-requests-limit: 0
     ignore:
       # Pin @types/node to version 24.x to match Node.js 24 LTS
       - dependency-name: "@types/node"
