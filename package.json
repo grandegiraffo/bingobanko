@@ -25,7 +25,7 @@
     "vue-i18n": "^11.3.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260313.1",
+    "@cloudflare/workers-types": "^4.20260316.1",
     "@eslint/js": "^10.0.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.12.0",
@@ -45,7 +45,7 @@
     "vitest": "^4.1.0",
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.5",
-    "wrangler": "^4.73.0"
+    "wrangler": "^4.74.0"
   },
   "pnpm": {
     "overrides": {
