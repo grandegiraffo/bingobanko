@@ -50,7 +50,8 @@
   "pnpm": {
     "overrides": {
       "glob": "latest",
-      "minimatch": "^10.2.1"
+      "minimatch": "^10.2.1",
+      "flatted": "^3.4.2"
     },
     "onlyBuiltDependencies": [
       "esbuild",
