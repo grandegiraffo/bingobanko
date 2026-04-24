@@ -22,7 +22,7 @@
     "@hugeicons/core-free-icons": "^4.1.1",
     "@hugeicons/vue": "^1.0.5",
     "vue": "^3.5.33",
-    "vue-i18n": "^11.3.2"
+    "vue-i18n": "^11.4.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260422.1",
