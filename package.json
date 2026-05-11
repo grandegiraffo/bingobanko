@@ -6,7 +6,7 @@
   "engines": {
     "node": "^24.15.0"
   },
-  "packageManager": "pnpm@10.33.2",
+  "packageManager": "pnpm@10.33.4",
   "scripts": {
     "dev": "vite",
     "build": "pnpm type-check && vite build",
@@ -19,19 +19,19 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@hugeicons/core-free-icons": "^4.1.2",
+    "@hugeicons/core-free-icons": "^4.1.3",
     "@hugeicons/vue": "^1.0.5",
     "vue": "^3.5.34",
     "vue-i18n": "^11.4.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260508.1",
+    "@cloudflare/workers-types": "^4.20260511.1",
     "@eslint/js": "^10.0.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.12.3",
     "@vitejs/plugin-vue": "^6.0.6",
-    "@vitest/coverage-v8": "^4.1.5",
-    "@vitest/ui": "^4.1.5",
+    "@vitest/coverage-v8": "^4.1.6",
+    "@vitest/ui": "^4.1.6",
     "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.9.1",
     "eslint": "^10.3.0",
@@ -41,8 +41,8 @@
     "jiti": "^2.7.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.11",
-    "vitest": "^4.1.5",
+    "vite": "^8.0.12",
+    "vitest": "^4.1.6",
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.8",
     "wrangler": "^4.90.0"
