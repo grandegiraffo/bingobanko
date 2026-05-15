@@ -46,12 +46,5 @@
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.9",
     "wrangler": "^4.91.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp",
-      "workerd"
-    ]
   }
 }
