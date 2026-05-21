@@ -22,16 +22,16 @@
     "@hugeicons/core-free-icons": "^4.1.4",
     "@hugeicons/vue": "^1.0.5",
     "vue": "^3.5.34",
-    "vue-i18n": "^11.4.3"
+    "vue-i18n": "^11.4.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260517.1",
+    "@cloudflare/workers-types": "^4.20260520.1",
     "@eslint/js": "^10.0.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.12.4",
     "@vitejs/plugin-vue": "^6.0.7",
-    "@vitest/coverage-v8": "^4.1.6",
-    "@vitest/ui": "^4.1.6",
+    "@vitest/coverage-v8": "^4.1.7",
+    "@vitest/ui": "^4.1.7",
     "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.9.1",
     "eslint": "^10.4.0",
@@ -40,11 +40,11 @@
     "happy-dom": "^20.9.0",
     "jiti": "^2.7.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.3",
+    "typescript-eslint": "^8.59.4",
     "vite": "^8.0.13",
-    "vitest": "^4.1.6",
+    "vitest": "^4.1.7",
     "vue-eslint-parser": "^10.4.0",
-    "vue-tsc": "^3.2.9",
-    "wrangler": "^4.92.0"
+    "vue-tsc": "^3.3.1",
+    "wrangler": "^4.93.0"
   }
 }
