@@ -9,6 +9,14 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      pnpm-dependencies:
+        patterns:
+          - "*"
+      pnpm-security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
     # Disable routine version-bump PRs; security update PRs (CVE/advisory-driven)
     # are opened automatically by GitHub and are not affected by this limit.
     open-pull-requests-limit: 1
