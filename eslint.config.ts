@@ -3,10 +3,11 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import vuePlugin from 'eslint-plugin-vue';
 import globals from 'globals';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 type FlatConfigItem = Linter.Config;
 
-const vueConfigs: FlatConfigItem[] = (vuePlugin.configs['flat/recommended']).map(
+const vueConfigs: FlatConfigItem[] = vuePlugin.configs['flat/recommended'].map(
   (config): FlatConfigItem => ({
     ...config,
     languageOptions: {
@@ -20,7 +21,9 @@ const vueConfigs: FlatConfigItem[] = (vuePlugin.configs['flat/recommended']).map
   }),
 );
 
-const tsConfigs: FlatConfigItem[] = (tseslint.configs.recommendedTypeChecked as FlatConfigItem[]).map(
+const tsConfigs: FlatConfigItem[] = (
+  tseslint.configs.recommendedTypeChecked as FlatConfigItem[]
+).map(
   (config): FlatConfigItem => ({
     ...config,
     files: ['**/*.{ts,tsx}'],
@@ -56,6 +59,7 @@ const config = [
       'no-debugger': 'warn',
     },
   },
+  eslintConfigPrettier,
 ] satisfies FlatConfigItem[];
 
 export default config;

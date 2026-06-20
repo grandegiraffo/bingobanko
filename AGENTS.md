@@ -15,21 +15,25 @@ pnpm build            # Type-check + build
 pnpm type-check       # TypeScript only
 pnpm lint             # ESLint check
 pnpm lint:fix         # ESLint auto-fix
-pnpm test             # Run tests (Vitest)
+pnpm format           # Prettier check
+pnpm format:fix       # Prettier auto-fix
+pnpm test             # Run tests in watch mode
+pnpm test:ui          # Run tests with interactive UI
 pnpm test:coverage    # Tests with coverage report
 pnpm deploy:worker    # Build + deploy to Cloudflare Workers
 ```
 
 ## Change Workflow
 
-1. `pnpm test && pnpm lint && pnpm type-check` — baseline check
+1. `pnpm i && pnpm check` — baseline check
 2. Make changes
-3. `pnpm type-check && pnpm lint:fix && pnpm test`
+3. `pnpm check`
 4. Commit: `<type>: <description>` (e.g. `feat:`, `fix:`, `test:`, `refactor:`)
 
 ## Guardrails
 
 **Never:**
+
 - Disable TypeScript strict mode or use `any` without strong justification
 - Remove or weaken existing tests
 - Change responsive breakpoints without explicit instruction
@@ -37,6 +41,7 @@ pnpm deploy:worker    # Build + deploy to Cloudflare Workers
 - Modify `node_modules/`, `dist/`, or `coverage/`
 
 **Always:**
+
 - Use `@/` alias for `src/` imports
 - Co-locate tests as `*.spec.ts` next to the file under test
 - Keep Danish (`da`) and English (`en`) i18n parity in `src/locales/`
@@ -51,8 +56,10 @@ Each file exports a named `GameModule` of type `BingoGame`:
 export const GameModule: BingoGame = {
   GameId: 'da-80s-action-tv-tropes',
   GameName: '...',
-  GameSquares: [ /* BingoSquareTemplate[] — BingoSquare without `marked` */ ],
-}
+  GameSquares: [
+    /* BingoSquareTemplate[] — BingoSquare without `marked` */
+  ],
+};
 ```
 
 `BingoSquare` shape: `{ id, title, description, category, marked }`

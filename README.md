@@ -35,13 +35,16 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 ### Prerequisites
 
 #### Node.js (v24.x LTS) via [nvm](https://github.com/nvm-sh/nvm)
+
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 source ~/.bashrc # or
 source ~/.zshrc # or just open a new terminal
 nvm install # picks up the version specified in the .nvmrc file
 ```
+
 #### [pnpm](https://pnpm.io/installation) (v10.x)
+
 ```bash
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```

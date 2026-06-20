@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BingoGame from './components/bingo-game.vue'
+import BingoGame from './components/bingo-game.vue';
 </script>
 
 <template>
@@ -10,7 +10,8 @@ import BingoGame from './components/bingo-game.vue'
 
 <style>
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;

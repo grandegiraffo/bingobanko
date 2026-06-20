@@ -13,6 +13,7 @@ For complex multi-step tasks, track progress in `Copilot-Processing.md` file:
 4. **Summarize**: Add final summary when all tasks complete
 
 **Rules:**
+
 - Work silently - no phase announcements or verbose commentary
 - Execute one step at a time
 - Update tracking file as you progress

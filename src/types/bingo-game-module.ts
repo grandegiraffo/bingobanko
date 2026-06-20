@@ -1,14 +1,14 @@
-import type { BingoSquare } from "@/types/bingo-square";
+import type { BingoSquare } from '@/types/bingo-square';
 
-export type BingoSquareTemplate = Omit<BingoSquare, "marked">;
+export type BingoSquareTemplate = Omit<BingoSquare, 'marked'>;
 
 /**
  * Shape of a single game's definition.
  */
 export type BingoGame = {
-	GameId: string;
-	GameName: string;
-	GameSquares: BingoSquareTemplate[];
+  GameId: string;
+  GameName: string;
+  GameSquares: BingoSquareTemplate[];
 };
 
 /**
@@ -19,5 +19,5 @@ export type BingoGame = {
  * with the exported bindings as properties.
  */
 export type BingoGameDataModule = {
-	GameModule: BingoGame;
+  GameModule: BingoGame;
 };
