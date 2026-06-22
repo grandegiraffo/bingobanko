@@ -16,7 +16,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       - name: Setup Node.js
@@ -24,13 +23,12 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: pnpm
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Lint
+      - name: ESLint check
         run: pnpm lint
-
+      - name: Prettier format check
+        run: pnpm format
       - name: Build
         run: pnpm build
         env:
