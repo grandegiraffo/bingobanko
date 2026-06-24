@@ -45,6 +45,7 @@ pnpm deploy:worker    # Build + deploy to Cloudflare Workers
 - Use `@/` alias for `src/` imports
 - Co-locate tests as `*.spec.ts` next to the file under test
 - Keep Danish (`da`) and English (`en`) i18n parity in `src/locales/`
+- Add a `$schema` to JSON/JSONC config files (for example `package.json`, `wrangler.jsonc`, `tsconfig*.json`, `.prettierrc.json`) and a `# yaml-language-server: $schema=...` comment at the top of YAML files (for example workflows, `dependabot.yml`, `pnpm-workspace.yaml`) to improve editor validation and autocomplete
 
 ## Domain Facts
 
