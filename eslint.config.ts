@@ -23,20 +23,18 @@ const vueConfigs: FlatConfigItem[] = vuePlugin.configs['flat/recommended'].map(
 
 const tsConfigs: FlatConfigItem[] = (
   tseslint.configs.recommendedTypeChecked as FlatConfigItem[]
-).map(
-  (config): FlatConfigItem => ({
-    ...config,
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      ...(config.languageOptions ?? {}),
-      parserOptions: {
-        ...(config.languageOptions?.parserOptions ?? {}),
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
+).map((config): FlatConfigItem => ({
+  ...config,
+  files: ['**/*.{ts,tsx}'],
+  languageOptions: {
+    ...(config.languageOptions ?? {}),
+    parserOptions: {
+      ...(config.languageOptions?.parserOptions ?? {}),
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
     },
-  }),
-);
+  },
+}));
 
 const config = [
   {

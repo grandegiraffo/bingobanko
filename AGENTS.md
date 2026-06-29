@@ -57,9 +57,7 @@ Each file exports a named `GameModule` of type `BingoGame`:
 export const GameModule: BingoGame = {
   GameId: 'da-80s-action-tv-tropes',
   GameName: '...',
-  GameSquares: [
-    /* BingoSquareTemplate[] — BingoSquare without `marked` */
-  ],
+  GameSquares: [/* BingoSquareTemplate[] — BingoSquare without `marked` */],
 };
 ```
 
