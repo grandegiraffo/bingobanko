@@ -3,6 +3,9 @@
   "name": "bingo",
   "main": "src/worker.ts",
   "compatibility_date": "2025-11-17",
+  "cache": {
+    "enabled": true,
+  },
   "placement": {
     "mode": "smart",
   },
