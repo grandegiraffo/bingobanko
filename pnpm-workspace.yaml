@@ -2,7 +2,7 @@
 
 minimumReleaseAge: 1441
 minimumReleaseAgeExclude:
-  - '@cloudflare/worker-types'
+  - '@cloudflare/workers-types'
   - '@cloudflare/workerd-*'
   - miniflare
   - wrangler
