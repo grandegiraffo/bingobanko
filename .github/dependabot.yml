@@ -28,3 +28,8 @@ updates:
       # Pin @types/node to version 24.x to match Node.js 24 LTS
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
+      # Hold TypeScript on 6.x: TS 7 is the native (Go) compiler with no stable
+      # plugin API yet, so vue-tsc/Volar and typescript-eslint can't run on it.
+      # Remove once TS 7.1 lands and the toolchain supports it (vuejs/language-tools#5381).
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
