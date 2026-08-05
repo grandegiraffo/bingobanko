@@ -1,107 +1,37 @@
 # Copilot Instructions for BingoBanko
 
-## Project Overview
+BingoBanko is a Vue 3 + TypeScript SPA of bingo boards built from movie/TV tropes, bilingual (Danish/English), responsive for mobile, iPad, and desktop.
 
-BingoBanko is a bingo game web application featuring movie and TV tropes in Danish. Built with Vue 3, TypeScript, and Vite, it's optimized for mobile, tablet (iPad), and desktop with responsive design.
+**[`AGENTS.md`](../AGENTS.md) is the source of truth** for commands, CI, architecture, game data, URL state, and testing setup. Read it first. This file only covers authoring conventions for inline suggestions.
 
-## Technology Stack
+## Vue
 
-- **Vue 3** - Using Composition API with `<script setup>` syntax
-- **TypeScript** - Strict mode enabled
-- **Vite** - Build tool and dev server
-- **Vitest** - Unit testing framework
-- **happy-dom** - Test environment
-- **ESLint** - Code linting with TypeScript and Vue plugins
-- **GitHub Actions** - CI/CD pipeline
-- **Cloudflare Workers** - Production hosting via Wrangler
+- Composition API with `<script setup lang="ts">`; template → script → style order.
+- Component filenames are kebab-case (`bingo-game.vue`). `vue/multi-word-component-names` is off, so single-word names are allowed.
+- `v-for` always with `:key`.
+- Component-scoped CSS lives in a sibling `.css` file (`bingo-game.css`), not a `<style>` block. Plain CSS, no framework.
+- Never change the responsive breakpoints (mobile <768px, tablet 768–1199px, desktop ≥1200px) unless asked.
 
-## Development Commands
+## TypeScript
 
-- `pnpm dev` - Start local development server
-- `pnpm build` - Type check and build for production
-- `pnpm type-check` - Run TypeScript type checking
-- `pnpm lint` - Lint code with ESLint
-- `pnpm lint:fix` - Auto-fix ESLint issues
-- `pnpm test` - Run tests with Vitest
-- `pnpm test:ui` - Run tests with UI
-- `pnpm test:coverage` - Run tests with coverage report
+- `strict` is on, plus `noUnusedLocals` and `noUnusedParameters` — an unused import or parameter fails `pnpm type-check`, not just lint.
+- `type` for unions, primitives, and computed types; `interface` for extensible object shapes.
+- No `any`. Shared types belong in `src/types/`.
+- Import from `src/` via the `@/` alias.
 
-## Coding Conventions
+## Style
 
-### Vue Components
+- Prettier owns formatting: single quotes, semicolons, 2-space indent, `printWidth: 100`, `trailingComma: all`. Don't hand-format against it.
+- `no-console` and `no-debugger` are warnings, so CI will not stop them — leave neither in committed code.
+- Add `$schema` to JSON/JSONC config files and a `# yaml-language-server: $schema=...` header to YAML files.
 
-- Use Vue 3 Composition API with `<script setup>` syntax
-- Component files should use kebab-case naming (e.g., `bingo-game.vue`)
-- Follow the template-script-style order in SFC files
-- Use TypeScript for all script sections
-- Prefer `v-for` with `:key` for list rendering
-- Use `@click` and other event handlers with kebab-case event names
+## i18n
 
-### TypeScript
+- No hardcoded UI strings. Every user-visible string is a `t()` key in both `src/locales/da.json` and `src/locales/en.json`, kept in parity.
+- The active locale is driven by the selected game's `da-`/`en-` id prefix — see `AGENTS.md` before touching locale logic.
 
-- Strict mode is enabled - follow strict type checking
-- Target: ES2022
-- Use `type` for unions, primitives, and computed types; use `interface` for object shapes that may be extended
-- Avoid `any` types - use proper typing
-- Enable all strict compiler options (noUnusedLocals, noUnusedParameters, etc.)
+## Tests
 
-### Code Style
-
-- Use single quotes for strings in TypeScript/JavaScript
-- No console statements (use sparingly, only when necessary)
-- No debugger statements
-- Follow ESLint rules configured in `eslint.config.ts`
-- Use 2 spaces for indentation
-- Multi-word component names rule is disabled
-
-### Testing
-
-- Write tests using Vitest and `@vue/test-utils`
-- Test files should be co-located with components as `*.spec.ts`
-- Use `describe` and `it` blocks from Vitest
-- Mount components using `@vue/test-utils` mount function
-- Use `await wrapper.vm.$nextTick()` for waiting on DOM updates
-- Test both user interactions and component state
-
-### File Organization
-
-- `/src/components` - Vue components and their tests
-- `/src/game-data` - Game data modules (TypeScript files)
-- `/src/types` - TypeScript type definitions
-- `/src/assets` - Static assets
-- Use `@/` alias for imports from `src` directory
-
-### Project-Specific Patterns
-
-- Game data modules export arrays of bingo squares
-- Bingo squares have: title, description, category, and marked state
-- URL parameters are used for game selection (`g`) and randomization (`r`)
-- The app supports multiple game types loaded dynamically
-- Danish language is used for all UI text
-- Responsive breakpoints: Mobile (<768px), Tablet (768-1199px), Desktop (≥1200px)
-
-### Build Configuration
-
-- Base URL defaults to `/`; override with `BASE_PATH` if deploying under a subpath
-- Vite is configured with Vue plugin and path alias `@`
-
-## Code Quality Requirements
-
-- All code must pass TypeScript type checking
-- All code must pass ESLint linting
-- All changes should include appropriate tests
-- Tests must pass before merging
-- Maintain test coverage
-
-## CI/CD Pipeline
-
-- Pull requests trigger CI workflow that runs: lint, build, and test with coverage
-- Deploy to Cloudflare Workers with `pnpm deploy:worker` (uses `wrangler.jsonc`)
-- Node.js version is specified in `.nvmrc` file (v24)
-
-## Additional Notes
-
-- The application is designed for iPad and mobile web
-- UI text is in Danish
-- The project uses HugeIcons for category icons (categories: mainPlot, subPlot, character, visual, quote, meta)
-- Focus on maintaining responsive design across all screen sizes
+- Co-locate as `*.spec.ts` next to the file under test.
+- Mount with `@vue/test-utils` and `global: { plugins: [i18n] }`; `await wrapper.vm.$nextTick()` between an interaction and its assertion.
+- Cover both user interaction and resulting component state.
