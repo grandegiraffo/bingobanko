@@ -13,17 +13,23 @@ interface Env {
  * worker invocation each time.
  */
 function applyCacheHeaders(response: Response, url: URL): Response {
-  if (response.headers.has('Cache-Control')) return response;
+  const isNotFound = response.status === 404;
+
+  // 404s are handled first: the assets binding ships its own Cache-Control
+  // (public, max-age=0, must-revalidate) and its 404 body is HTML served under
+  // whatever path was probed, so deferring to either the header guard or the
+  // path/content-type rules below would drop the edge-cache policy.
+  if (!isNotFound && response.headers.has('Cache-Control')) return response;
 
   const cached = new Response(response.body, response);
   const contentType = cached.headers.get('Content-Type') ?? '';
 
-  if (/^\/assets\//.test(url.pathname)) {
+  if (isNotFound) {
+    cached.headers.set('Cache-Control', 'public, max-age=7200');
+  } else if (/^\/assets\//.test(url.pathname)) {
     cached.headers.set('Cache-Control', 'public, max-age=3628800, immutable');
   } else if (contentType.includes('text/html')) {
     cached.headers.set('Cache-Control', 'no-cache');
-  } else if (cached.status === 404) {
-    cached.headers.set('Cache-Control', 'public, max-age=7200');
   }
 
   return cached;

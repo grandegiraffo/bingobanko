@@ -21,7 +21,7 @@ function createEnv(): Env {
             headers: { 'Content-Type': 'text/html' },
           });
         }
-        if (pathname.startsWith('/assets/')) {
+        if (pathname === '/assets/app.abc123.js') {
           return new Response('console.log(1)', {
             status: 200,
             headers: { 'Content-Type': 'application/javascript' },
@@ -33,7 +33,16 @@ function createEnv(): Env {
             headers: { 'Content-Type': 'image/svg+xml' },
           });
         }
-        return new Response('Not Found', { status: 404 });
+        // The Static Assets binding sends these headers on a 404, so the stub
+        // has to as well or the worker's own 404 policy looks like it applies
+        // when in production it would be skipped.
+        return new Response('<html>Not Found</html>', {
+          status: 404,
+          headers: {
+            'Content-Type': 'text/html; charset=utf-8',
+            'Cache-Control': 'public, max-age=0, must-revalidate',
+          },
+        });
       }),
     } as unknown as Fetcher,
   };
@@ -97,6 +106,16 @@ describe('worker asset serving (no SPA rewrite)', () => {
   it('returns a cached 404 for scanner probes instead of a 200 shell', async () => {
     const env = createEnv();
     const response = await worker.fetch(makeRequest('https://bingo.duhn.net/.git/config'), env);
+    expect(response.status).toBe(404);
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=7200');
+  });
+
+  it('caches a 404 under /assets/ instead of marking it immutable', async () => {
+    const env = createEnv();
+    const response = await worker.fetch(
+      makeRequest('https://bingo.duhn.net/assets/missing.js'),
+      env,
+    );
     expect(response.status).toBe(404);
     expect(response.headers.get('Cache-Control')).toBe('public, max-age=7200');
   });
