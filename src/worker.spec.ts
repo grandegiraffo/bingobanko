@@ -13,8 +13,8 @@ interface Env {
 function createEnv(): Env {
   return {
     ASSETS: {
-      fetch: vi.fn().mockImplementation((req: Request) => {
-        const { pathname } = new URL(req.url);
+      fetch: vi.fn().mockImplementation((req: Request | string) => {
+        const { pathname } = new URL(typeof req === 'string' ? req : req.url);
         if (pathname === '/') {
           return new Response('<html>bingo</html>', {
             status: 200,
@@ -25,6 +25,12 @@ function createEnv(): Env {
           return new Response('console.log(1)', {
             status: 200,
             headers: { 'Content-Type': 'application/javascript' },
+          });
+        }
+        if (pathname === '/favicon.svg') {
+          return new Response('<svg/>', {
+            status: 200,
+            headers: { 'Content-Type': 'image/svg+xml' },
           });
         }
         return new Response('Not Found', { status: 404 });
@@ -93,6 +99,14 @@ describe('worker asset serving (no SPA rewrite)', () => {
     const response = await worker.fetch(makeRequest('https://bingo.duhn.net/.git/config'), env);
     expect(response.status).toBe(404);
     expect(response.headers.get('Cache-Control')).toBe('public, max-age=7200');
+  });
+
+  it('serves favicon.svg for the implicit /favicon.ico request', async () => {
+    const env = createEnv();
+    const response = await worker.fetch(makeRequest('https://bingo.duhn.net/favicon.ico'), env);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('Content-Type')).toBe('image/svg+xml');
+    expect(response.headers.get('Cache-Control')).toBe('public, max-age=86400');
   });
 });
 

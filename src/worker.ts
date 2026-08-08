@@ -52,6 +52,21 @@ export default {
       return Response.json({ status: 'ok', timestamp: Date.now() });
     }
 
+    // Browsers request /favicon.ico implicitly, regardless of the <link
+    // rel="icon"> in index.html. We only ship favicon.svg, and with the SPA
+    // fallback disabled that request now 404s, so serve the SVG under the .ico
+    // path instead of emitting a 404 on every first page view.
+    if (pathname === '/favicon.ico') {
+      try {
+        const icon = await env.ASSETS.fetch(new URL('/favicon.svg', url).toString(), { method });
+        const response = new Response(icon.body, icon);
+        response.headers.set('Cache-Control', 'public, max-age=86400');
+        return response;
+      } catch {
+        return new Response('Internal Server Error', { status: 500 });
+      }
+    }
+
     // Serve static assets. With SPA fallback disabled in wrangler.jsonc the
     // assets binding returns a real 404 for unknown paths instead of a 200
     // index.html shell, so probes for /.git/config, /.env, etc. can't
