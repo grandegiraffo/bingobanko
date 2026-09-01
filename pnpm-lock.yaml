@@ -31,8 +31,8 @@ importers:
         version: 11.4.10(vue@3.5.42(typescript@6.0.3))
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^5.20260831.1
-        version: 5.20260831.1
+        specifier: ^5.20260901.1
+        version: 5.20260901.1
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.9.1(jiti@2.7.0)(supports-color@10.2.2))
@@ -98,7 +98,7 @@ importers:
         version: 3.3.11(typescript@6.0.3)
       wrangler:
         specifier: ^4.127.1
-        version: 4.127.1(@cloudflare/workers-types@5.20260831.1)
+        version: 4.127.1(@cloudflare/workers-types@5.20260901.1)
 
 packages:
 
@@ -166,8 +166,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@5.20260831.1':
-    resolution: {integrity: sha512-yXg4pwfYjhsDH9rYc3qZ3K+z62DCSvO/aj7GiZo6AyDeWGZpyFRpPMYcQ6LF/zfaf1x0Ngw2gSqL8JjuUtMGlA==}
+  '@cloudflare/workers-types@5.20260901.1':
+    resolution: {integrity: sha512-m1rNbR3UYC1pgaEyXkSlwLFLDB11QziYUlY0z/nqjwuYtg5dw9zBrgDudoSfYM6ebbPDKU81ogBQAzLp6h1y4w==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1176,8 +1176,8 @@ packages:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
 
-  ignore@7.0.6:
-    resolution: {integrity: sha512-BAg6QkE8W+TuQLrrw0Ugr7HegXduRuuj8/ti2kSOc+jz1dmx8/WNcjr6XGnq5YpDWxFwwaavqD0+jIUOKelTsw==}
+  ignore@7.0.8:
+    resolution: {integrity: sha512-YYNsSlXBjMk92SKnkwvB5LOVSa6OznlFUGcsvrFgNJbJCd0M1XKeFVRc8ZByeCqz32FivYNHJVooLmdqrmvp/Q==}
     engines: {node: '>= 4'}
 
   imurmurhash@0.1.4:
@@ -1777,7 +1777,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20260828.1':
     optional: true
 
-  '@cloudflare/workers-types@5.20260831.1': {}
+  '@cloudflare/workers-types@5.20260901.1': {}
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -2165,7 +2165,7 @@ snapshots:
       '@typescript-eslint/utils': 8.68.0(eslint@10.9.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       '@typescript-eslint/visitor-keys': 8.68.0
       eslint: 10.9.1(jiti@2.7.0)(supports-color@10.2.2)
-      ignore: 7.0.6
+      ignore: 7.0.8
       natural-compare: 1.4.0
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
@@ -2682,7 +2682,7 @@ snapshots:
 
   ignore@5.3.2: {}
 
-  ignore@7.0.6: {}
+  ignore@7.0.8: {}
 
   imurmurhash@0.1.4: {}
 
@@ -3138,7 +3138,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260828.1
       '@cloudflare/workerd-windows-64': 1.20260828.1
 
-  wrangler@4.127.1(@cloudflare/workers-types@5.20260831.1):
+  wrangler@4.127.1(@cloudflare/workers-types@5.20260901.1):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.0
       '@cloudflare/unenv-preset': 2.16.1(unenv@2.0.0-rc.24)(workerd@1.20260828.1)
@@ -3149,7 +3149,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20260828.1
     optionalDependencies:
-      '@cloudflare/workers-types': 5.20260831.1
+      '@cloudflare/workers-types': 5.20260901.1
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil
