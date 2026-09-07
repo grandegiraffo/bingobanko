@@ -43,7 +43,7 @@ source ~/.zshrc # or just open a new terminal
 nvm install # picks up the version specified in the .nvmrc file
 ```
 
-#### [pnpm](https://pnpm.io/installation) (v11.x)
+#### [pnpm](https://pnpm.io/installation) (v12.x)
 
 ```bash
 curl -fsSL https://get.pnpm.io/install.sh | sh -
@@ -79,17 +79,17 @@ pnpm lint:fix
 
 ### Deploying to Cloudflare Workers
 
-The app runs as a static site on Cloudflare Workers. Configuration is in `wrangler.jsonc`.
+The app runs as a static site on Cloudflare Workers. Configuration is in `wrangler.jsonc`. Use after build.
 
 ```bash
 # Log in to Cloudflare
-pnpm dlx wrangler login
+pnpm wrangler login
 
-# Implicit build and then deploy
-pnpm deploy:worker
+# Deploy
+pnpm deploy
 
 # Or just preview locally
-pnpm dlx wrangler dev --config wrangler.jsonc
+pnpm wrangler dev --config wrangler.jsonc
 ```
 
 ## Usage

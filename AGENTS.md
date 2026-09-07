@@ -6,13 +6,15 @@ Additional conventions live in [`.github/copilot-instructions.md`](.github/copil
 ## Commands
 
 ```bash
-pnpm check          # THE gate: type-check → lint → format → test:run
-pnpm test:run       # one-shot tests (plain `pnpm test` is vitest WATCH mode — never use in an agent session)
-pnpm test:run src/i18n.spec.ts        # single file
-pnpm test:run -t 'should mount'       # single test by name
-pnpm type-check     # vue-tsc (tsconfig.app) + tsc (tsconfig.node)
-pnpm lint:fix / pnpm format:fix
-pnpm deploy:worker  # pnpm build && wrangler deploy --config wrangler.jsonc
+pnpm check                          # THE gate: type-check → lint → format → test:run
+pnpm test:run                       # one-shot tests (plain `pnpm test` is vitest WATCH mode — never use in an agent session)
+pnpm test:run src/i18n.spec.ts      # single file
+pnpm test:run -t 'should mount'     # single test by name
+pnpm type-check                     # vue-tsc (tsconfig.app) + tsc (tsconfig.node)
+pnpm lint:fix                       # auto-fix eslint errors
+pnpm format:fix                     # auto-fix prettier formatting errors
+pnpm deploy                         # wrangler deploy --config wrangler.jsonc
+pnpm versions:upload                # Cloudflare Workers Builds deploy command (never `pnpm dlx wrangler`)
 ```
 
 Run `pnpm check` before committing. CI (`.github/workflows/build.yml`, **pull requests only**) runs `lint → format → build → test:coverage` with `pnpm install --frozen-lockfile`.
@@ -22,6 +24,7 @@ Node (version see `.nvmrc`), pnpm (version see `package.json` -> `packageManager
 ## Toolchain quirks
 
 - **`pnpm-workspace.yaml` exists but this is NOT a monorepo** (no `packages:`). It carries `minimumReleaseAge: 1441` — packages published in the last ~24h are refused by the installer (Cloudflare/wrangler packages are exempt) — plus security `overrides`. Adding a freshly published dependency will fail install; that is expected, not a bug.
+- **Do not use `pnpm dlx` for wrangler in Cloudflare Workers Builds**: `dlx` installs outside the workspace, so `allowBuilds` in `pnpm-workspace.yaml` does not apply and pnpm 12 fails with `ERR_PNPM_IGNORED_BUILDS` (esbuild, workerd). Use the pinned devDependency via `pnpm versions:upload`.
 - **Vitest config lives inside `vite.config.ts`** (`test: { globals: true, environment: 'happy-dom' }`). There is no `vitest.config.ts`.
 - **ESLint config is TypeScript** (`eslint.config.ts`, flat config, loaded via jiti) and uses `recommendedTypeChecked` with `projectService` — new files must be covered by a tsconfig or linting errors out.
 - Two TS projects: `tsconfig.app.json` (`src/**`, owns the `@/*` path alias) and `tsconfig.node.json` (`vite.config.ts`, `eslint.config.ts` only). Shared options in `tsconfig.base.json` (`strict`, `noUnusedLocals`, `noUnusedParameters`).
@@ -31,7 +34,7 @@ Node (version see `.nvmrc`), pnpm (version see `package.json` -> `packageManager
 ## Architecture
 
 - `src/main.ts` → `App.vue` → `src/components/bingo-game.vue` (~650 lines; the whole game lives here). Styles in `src/components/bingo-game.css` + `src/style.css`. Plain CSS, no framework.
-- `src/worker.ts` is the Cloudflare Workers entry (`wrangler.jsonc` → `main`): serves `./dist` via the `ASSETS` binding with SPA fallback, adds `/health`, and sets cache headers (`/assets/*` immutable, HTML `no-cache`). Deploy requires a fresh `dist/`, which `deploy:worker` builds.
+- `src/worker.ts` is the Cloudflare Workers entry (`wrangler.jsonc` → `main`): serves `./dist` via the `ASSETS` binding with SPA fallback, adds `/health`, and sets cache headers (`/assets/*` immutable, HTML `no-cache`). Deploy requires a fresh `dist/`, so run `pnpm build` before `pnpm deploy`.
 
 ### Game data (`src/game-data/*.ts`)
 
