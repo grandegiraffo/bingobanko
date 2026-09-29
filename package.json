@@ -7,7 +7,7 @@
   "engines": {
     "node": "^24.21.0"
   },
-  "packageManager": "pnpm@12.4.2",
+  "packageManager": "pnpm@12.6.0",
   "scripts": {
     "dev": "vite",
     "build": "pnpm type-check && vite build",
@@ -32,7 +32,7 @@
     "vue-i18n": "^11.4.12"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260927.1",
+    "@cloudflare/workers-types": "^5.20260929.1",
     "@eslint/js": "^10.0.1",
     "@tsconfig/node24": "^24.0.5",
     "@types/node": "^24.19.0",
@@ -54,6 +54,6 @@
     "vitest": "^5.0.2",
     "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.11",
-    "wrangler": "^4.141.0"
+    "wrangler": "^4.143.0"
   }
 }
