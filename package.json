@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "deploy": "wrangler deploy --config wrangler.jsonc",
-    "versions:upload": "wrangler versions upload",
+    "wrangler:preview": "wrangler preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --check .",
