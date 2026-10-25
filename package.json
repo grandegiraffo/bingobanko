@@ -7,7 +7,7 @@
   "engines": {
     "node": "^24.22.1"
   },
-  "packageManager": "pnpm@12.11.2",
+  "packageManager": "pnpm@12.15.0",
   "scripts": {
     "dev": "vite",
     "build": "pnpm type-check && vite build",
@@ -32,7 +32,7 @@
     "vue-i18n": "^11.4.16"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20261023.1",
+    "@cloudflare/workers-types": "^5.20261025.1",
     "@eslint/js": "^10.0.1",
     "@tsconfig/node24": "^24.0.5",
     "@types/node": "^24.19.2",
