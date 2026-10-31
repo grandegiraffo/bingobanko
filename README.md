@@ -28,6 +28,7 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 - **ESLint** - Code quality and consistency
 - **Prettier** - Code formatting
 - **GitHub Actions** - Automated builds and tests
+- **Renovate** - Automated dependency update PRs
 - **Cloudflare Workers** - Edge hosting via Wrangler
 
 ## Getting Started
