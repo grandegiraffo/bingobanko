@@ -19,6 +19,8 @@ pnpm versions:upload                # Cloudflare Workers Builds deploy command (
 
 Run `pnpm check` before committing. CI (`.github/workflows/build.yml`, **pull requests only**) runs `lint → format → build → test:coverage` with `pnpm install --frozen-lockfile`.
 
+Dependency update PRs come from Renovate (`renovate.json`, extends `config:recommended`). Dependabot is not used; don't add a `.github/dependabot.yml`.
+
 Node (version see `.nvmrc`), pnpm (version see `package.json` -> `packageManager`). Both pinned; mismatches break installs.
 
 ## Toolchain quirks

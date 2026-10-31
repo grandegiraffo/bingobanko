@@ -28,13 +28,14 @@ Loaded and randomised by 🔌 `src/components/bingo-game.vue` from data in 💾 
 - **ESLint** - Code quality and consistency
 - **Prettier** - Code formatting
 - **GitHub Actions** - Automated builds and tests
+- **Renovate** - Automated dependency update PRs
 - **Cloudflare Workers** - Edge hosting via Wrangler
 
 ## Getting Started
 
 ### Prerequisites
 
-#### Node.js (v24.x LTS) via [nvm](https://github.com/nvm-sh/nvm)
+#### Node.js (v26 LTS) via [nvm](https://github.com/nvm-sh/nvm)
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
