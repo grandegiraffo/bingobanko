@@ -1,4 +1,53 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"]
+  "description": "Weekly grouped updates, merged once CI passes. The age gate and its exemptions mirror minimumReleaseAge and minimumReleaseAgeExclude in pnpm-workspace.yaml (src/test/renovate.spec.ts checks). Renovate runs pnpm on the Node version in .nvmrc.",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver", "schedule:weekly"],
+  "labels": ["dependencies"],
+  "semanticCommits": "disabled",
+  "rangeStrategy": "bump",
+  "minimumReleaseAge": "1441 minutes",
+  "packageRules": [
+    {
+      "description": "Same exemptions as minimumReleaseAgeExclude in pnpm-workspace.yaml.",
+      "matchPackageNames": [
+        "@cloudflare/workers-types",
+        "@cloudflare/workerd-*",
+        "miniflare",
+        "wrangler",
+        "workerd"
+      ],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "One PR for minor and patch updates. .nvmrc is in the group so it moves together with engines.node.",
+      "matchManagers": ["npm", "nvm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "npm dependencies",
+      "automerge": true
+    },
+    {
+      "description": "Actions stay pinned to a commit SHA with a `# vX.Y.Z` comment; Renovate updates both. Digest-only updates (a moved tag) are not merged automatically.",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "GitHub Actions",
+      "automerge": true
+    },
+    {
+      "description": "Hold TypeScript on 6.x: vue-tsc/Volar and typescript-eslint can't run on the native TS 7 compiler yet (vuejs/language-tools#5381).",
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Move Node majors by hand, to LTS lines only: .nvmrc, engines.node, @types/node and the @tsconfig/nodeNN base of tsconfig.node.json change together (src/test/node-version.spec.ts checks).",
+      "matchPackageNames": ["node", "@types/node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Overrides are security floors scoped to advisory ranges; review them by hand (AGENTS.md › Commands).",
+      "matchDepTypes": ["pnpm-workspace.overrides"],
+      "enabled": false
+    }
+  ]
 }
