@@ -32,11 +32,11 @@
     "vue-i18n": "^11.4.18"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20261112.1",
+    "@cloudflare/workers-types": "^5.20261113.1",
     "@eslint/js": "^10.0.1",
-    "@tsconfig/node26": "^26.0.1",
+    "@tsconfig/node26": "^26.0.2",
     "@types/node": "^26.6.6",
-    "@vitejs/plugin-vue": "^6.0.10",
+    "@vitejs/plugin-vue": "^6.0.11",
     "@vitest/coverage-v8": "^5.1.0",
     "@vitest/ui": "^5.1.0",
     "@vue/test-utils": "^2.5.1",
@@ -47,7 +47,7 @@
     "globals": "^17.14.0",
     "happy-dom": "^21.0.4",
     "jiti": "^2.7.0",
-    "prettier": "^3.10.0",
+    "prettier": "^3.10.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
